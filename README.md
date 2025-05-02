@@ -1,10 +1,12 @@
 # MetalHUDHelper
 
-Want to view the Metal Performance HUD in a game or application? Here is a macOS menu bar utility for toggling the Apple Metal performance HUD without needing to execute command via the Terminal.
+A macOS menu bar app for toggling the Apple Metal performance HUD. Avoids having to execute a command via the Terminal.
 
 ![screenshot](images/metalhudhelper.png)
 
-The app mimics executing this from the terminal:
+When you want to see the performance HUD, just enable using **MetalHUDHelper** and restart the game or application. 
+
+The app is eliminates the need to execute these commands from the terminal:
 
 `defaults write -g MetalForceHudEnabled -bool YES` to enable and `defaults write -g MetalForceHudEnabled -bool NO` to disable.
 
@@ -15,8 +17,8 @@ The app mimics executing this from the terminal:
 ## Features
 
 - One-click toggle enabling/disabling the Metal performance HUD
-- Status persists re-boots (using global defaults)
-- App can start at login by enabling "Start at Login" via settings
+- Status persists after reboot
+- App can start on login by enabling "Start at Login" via settings
 
 > **Note**: after toggling, you need quit and relaunch the target application(s) for the changes to take effect
 
@@ -30,6 +32,7 @@ macOS 15.0 or later
 2. Drag **MetalHUDHelper** to your `Applications` folder
 3. Launch the app
 4. Click the menu bar icon to toggle the Metal Performance HUD on or off
+5. Restart any game or application to see the HUD
 
 ## Support
 
