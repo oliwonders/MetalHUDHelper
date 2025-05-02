@@ -79,7 +79,7 @@ jobs:
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
-          TEAM_ID: ${{ secrets.TEAM_ID }}
+          TEAM_ID: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
         run: |
           xcrun notarytool submit build/MetalHUDHelper.dmg \
           --apple-id "$APPLE_ID" \
