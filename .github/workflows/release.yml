@@ -85,8 +85,8 @@ jobs:
           --apple-id "$APPLE_ID" \
           --password "$APP_SPECIFIC_PASSWORD" \
           --team-id "$TEAM_ID" \
-          --wait \ 
-          --output-format json > notary.json
+          --wait --output-format json > notary.json
+
       - name: Dump Notary Log on Failure
         if: steps.notarize.outcome != 'success'
         env:
