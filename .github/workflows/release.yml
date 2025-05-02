@@ -75,7 +75,7 @@ jobs:
             build/MetalHUDHelper.dmg \
             dmg_temp
 
-      - name: Notarize & Staple DMG
+      - name: Notarize DMG
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.NOTARY_TOOL_APP_SPECIFIC_PASSWORD }}
@@ -85,10 +85,26 @@ jobs:
           --apple-id "$APPLE_ID" \
           --password "$APP_SPECIFIC_PASSWORD" \
           --team-id "$TEAM_ID" \
-          --wait
-
+          --wait \ 
+          --output-format json > notary.json
+      - name: Dump Notary Log on Failure
+        if: steps.notarize.outcome != 'success'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.NOTARY_TOOL_APP_SPECIFIC_PASSWORD }}
+          TEAM_ID: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
+        run: |
+          LOG_ID=$(jq -r .id notary.json)
+          echo "Notarization failed; fetching log for ID $LOG_ID"
+          xcrun notarytool log $LOG_ID \
+          --apple-id "$APPLE_ID" \
+          --password "$APP_SPECIFIC_PASSWORD" \
+          --team-id "$TEAM_ID"
+      - name: Staple it
+        if: steps.notarize.outcome == 'success'
+        run: |
+          echo "Notarization succeeded; stapling the DMG"
           xcrun stapler staple build/MetalHUDHelper.dmg
-
       - name: Create Release and Upload Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
