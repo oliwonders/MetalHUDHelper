@@ -78,7 +78,7 @@ jobs:
       - name: Notarize & Staple DMG
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
-          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.NOTARY_TOOL_APP_SPECIFIC_PASSWORD }}
           TEAM_ID: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
         run: |
           xcrun notarytool submit build/MetalHUDHelper.dmg \
