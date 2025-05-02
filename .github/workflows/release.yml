@@ -1,0 +1,98 @@
+name: 🔨 Build & Release
+
+# Trigger on new semver tags, or you can add `workflow_dispatch:` for manual runs
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import Signing Certificate
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.CERT_P12_BASE64 }}
+          p12-password: ${{ secrets.CERT_P12_PASSWORD }}
+          keychain: signing_temp
+          keychain-password: ${{ secrets.CERT_P12_PASSWORD }}
+
+      - name: Add build.keychain to search path
+        run: |
+          security list-keychains -d user -s "$HOME/Library/Keychains/signing_temp.keychain-db" "$HOME/Library/Keychains/login.keychain-db"
+
+      - name: Show current keychain search path
+        run: security list-keychains -d user
+
+      - name: List Codesigning Identities
+        run: security find-identity -v -p codesigning
+
+      - name: Unlock build.keychain
+        run: |
+          security unlock-keychain -p "${{ secrets.CERT_P12_PASSWORD }}" "$HOME/Library/Keychains/signing_temp.keychain-db"
+
+      - name: Archive Release Build
+        run: |
+          xcodebuild archive \
+            -project MetalHUDHelper.xcodeproj \
+            -scheme MetalHUDHelper \
+            -configuration Release \
+            -archivePath $PWD/build/MetalHUDHelper.xcarchive \
+            DEVELOPMENT_TEAM=$CODE_SIGN_DEVELOPMENT_TEAM_ID \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY=$CODE_SIGN_DEVELOPMENT_IDENTITY
+
+      - name: Export .app Bundle
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $PWD/build/MetalHUDHelper.xcarchive \
+            -exportPath $PWD/build \
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: Create DMG
+        run: |
+          brew install create-dmg
+
+          mkdir -p dmg_temp
+          ln -s /Applications dmg_temp/Applications
+          cp -r build/MetalHUDHelper.app dmg_temp/
+
+          create-dmg \
+            --volname 'MetalHUDHelper' \
+            --window-pos 200 120 \
+            --window-size 800 400 \
+            --icon-size 100 \
+            --icon 'MetalHUDHelper.app' 200 190 \
+            --app-drop-link 600 190 \
+            --no-internet-enable \
+            build/MetalHUDHelper.dmg \
+            dmg_temp
+
+      - name: Install GitHub CLI
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          brew install gh || true
+
+      - name: Create Release and Upload Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            # Extract tag name without refs/tags/ prefix
+            TAG=${GITHUB_REF#refs/tags/}
+            
+            echo "Creating release for tag: $TAG"
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes "## Release Notes" \
+              build/MetalHUDHelper.dmg
+          else
+            echo "Not running on a tag, skipping release creation"
+          fi
