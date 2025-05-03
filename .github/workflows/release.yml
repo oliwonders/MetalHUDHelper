@@ -47,7 +47,8 @@ jobs:
             -archivePath $PWD/build/MetalHUDHelper.xcarchive \
             DEVELOPMENT_TEAM=$CODE_SIGN_DEVELOPMENT_TEAM_ID \
             CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY=$CODE_SIGN_DEVELOPMENT_IDENTITY
+            CODE_SIGN_IDENTITY=$CODE_SIGN_DEVELOPMENT_IDENTITY \
+            CODE_SIGN_HARDENED_RUNTIME=YES
 
       - name: Export .app Bundle
         run: |
@@ -100,7 +101,7 @@ jobs:
           --apple-id "$APPLE_ID" \
           --password "$APP_SPECIFIC_PASSWORD" \
           --team-id "$TEAM_ID"
-      - name: Staple it
+      - name: Staple the DMG
         if: steps.notarize.outcome == 'success'
         run: |
           echo "Notarization succeeded; stapling the DMG"

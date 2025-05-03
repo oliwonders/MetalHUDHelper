@@ -12,7 +12,6 @@ class MetalHUDManager {
     }
 
     // MARK: - public functions
-
     // Check if Metal HUD is currently enabled
     func checkHUDStatus() {
         let result = executeCommand(
@@ -92,36 +91,6 @@ enum HUDStatus {
 
 // MARK: - private methods
 extension MetalHUDManager {
-
-    //    private func getEnvironmentVariableState(name: String) -> Bool {
-    //        let result = executeCommand("launchctl getenv \(name)")
-    //        return result.output == "1"
-    //    }
-    //
-    //    private func setEnvironmentVariable(name: String, value: String) {
-    //        let result = executeCommand("launchctl setenv \(name) \(value)")
-    //        if result.success {
-    //            print("Successfully set \(name) to \(value)")
-    //        } else {
-    //            print("Failed to set environment variable \(name)")
-    //        }
-    //    }    
-    //    private func checkCurrentStates() {
-    //        // Run these after init to avoid triggering the didSet during initialization
-    //        self.hudStatus = getEnvironmentVariableState(name: "MTL_HUD_ENABLED")
-    //        print("isHUDEnabled via environment string: \(isHUDEnabled)")
-    //        self.isHUDLoggingEnabled = getEnvironmentVariableState(
-    //            name: "MTL_HUD_LOGGING_ENABLED"
-    //        )
-    //        print(
-    //            "isHUDLoggingEnabled via environment string: \(isHUDLoggingEnabled)"
-    //        )
-    //        self.isGlobalHUDEnabled = getGlobalDefaultsState(
-    //            key: "MetalForceHudEnabled"
-    //        )
-    //        print("isGlobalHUDEnabled via defaults: \(isGlobalHUDEnabled)")
-    //    }
-
 
     private func executeCommand(_ command: String) -> (
         success: Bool, output: String
