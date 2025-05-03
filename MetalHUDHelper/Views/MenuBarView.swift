@@ -23,10 +23,7 @@ struct MenuBarView: View {
       }
     }
     Divider()
-    SettingsLink {
-      Text("Settings...")
-    }
-    .keyboardShortcut(",", modifiers: [.command])
+    CustomSettingsLink()
     AboutSettingsButton()
     Divider()
 
