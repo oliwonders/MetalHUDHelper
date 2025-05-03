@@ -48,6 +48,7 @@ jobs:
             DEVELOPMENT_TEAM=$CODE_SIGN_DEVELOPMENT_TEAM_ID \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY=$CODE_SIGN_DEVELOPMENT_IDENTITY \
+            OTHER_CODE_SIGN_FLAGS="--options=runtime"
 
       - name: Export .app Bundle
         run: |
@@ -55,6 +56,12 @@ jobs:
             -archivePath $PWD/build/MetalHUDHelper.xcarchive \
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist
+
+      - name: Re-sign with Hardened Runtime
+        env:
+          CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
+        run: |
+          codesign --force --options runtime --sign "$CODE_SIGN_IDENTITY" build/MetalHUDHelper.app
 
       - name: Create DMG
         run: |
