@@ -41,7 +41,7 @@ jobs:
       - name: Archive Release Build
         env:
           DEVELOPMENT_TEAM: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
-          CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
+          CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_DEVELOPMENT_IDENTITY }}
         run: |
           xcodebuild archive \
             -project MetalHUDHelper.xcodeproj \
@@ -103,6 +103,7 @@ jobs:
           --apple-id "$APPLE_ID" \
           --password "$APP_SPECIFIC_PASSWORD" \
           --team-id "$TEAM_ID"
+
       - name: Staple the DMG
         if: steps.notarize.outcome == 'success'
         run: |
