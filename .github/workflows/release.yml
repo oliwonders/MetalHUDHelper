@@ -95,7 +95,7 @@ jobs:
           --wait --output-format json > notary.json
 
       - name: Dump Notary Log on Failure
-        if: steps.notarize.outcome != 'success'
+        if: failure() && steps.notarize.conclusion == 'failure'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.NOTARY_TOOL_APP_SPECIFIC_PASSWORD }}
@@ -109,7 +109,6 @@ jobs:
           --team-id "$TEAM_ID"
 
       - name: Staple the DMG
-        if: steps.notarize.outcome == 'success'
         run: |
           echo "Notarization succeeded; stapling the DMG"
           xcrun stapler staple build/MetalHUDHelper.dmg
