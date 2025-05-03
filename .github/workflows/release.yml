@@ -57,11 +57,11 @@ jobs:
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist
 
-      - name: Re-sign with Hardened Runtime
-        env:
-          CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
-        run: |
-          codesign --force --options runtime --sign "$CODE_SIGN_IDENTITY" build/MetalHUDHelper.app
+      # - name: Re-sign with Hardened Runtime
+      #   env:
+      #     CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
+      #   run: |
+      #     codesign --force --options runtime --sign "$CODE_SIGN_IDENTITY" build/MetalHUDHelper.app
 
       - name: Create DMG
         run: |
@@ -107,11 +107,12 @@ jobs:
           --apple-id "$APPLE_ID" \
           --password "$APP_SPECIFIC_PASSWORD" \
           --team-id "$TEAM_ID"
+
       - name: Staple the DMG
-        if: steps.notarize.outcome == 'success'
         run: |
           echo "Notarization succeeded; stapling the DMG"
           xcrun stapler staple build/MetalHUDHelper.dmg
+
       - name: Create Release and Upload Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
