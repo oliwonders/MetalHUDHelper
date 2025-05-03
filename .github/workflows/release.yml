@@ -40,9 +40,9 @@ jobs:
 
       - name: Archive Release Build
         env:
-          DEVELOPMENT_TEAM: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
+          DEVELOPMENT_TEAM: "ZV389CJJBX"
           CODE_SIGN_STYLE: Manual
-          CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_DEVELOPMENT_IDENTITY }}
+          CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
           CODE_SIGN_HARDENED_RUNTIME: "YES"
         run: |
           xcodebuild archive \
