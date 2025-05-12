@@ -121,11 +121,54 @@ jobs:
             # Extract tag name without refs/tags/ prefix
             TAG=${GITHUB_REF#refs/tags/}
             
+            echo "Zipping .app for release..."
+            ditto -c -k --sequesterRsrc --keepParent build/MetalHUDHelper.app build/MetalHUDHelper.app.zip
+
             echo "Creating release for tag: $TAG"
             gh release create "$TAG" \
               --title "$TAG" \
               --notes "## Release Notes" \
-              build/MetalHUDHelper.dmg
+              build/MetalHUDHelper.dmg \
+              build/MetalHUDHelper.app.zip
           else
             echo "Not running on a tag, skipping release creation"
           fi
+
+  update-cask:
+    needs: build-and-publish
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout homebrew-tap
+        uses: actions/checkout@v4
+        with:
+          repository: oliwonders/homebrew-tap
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download .app.zip from GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          curl -L -o MetalHUDHelper.app.zip \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            https://github.com/oliwonders/MetalHUDHelper/releases/download/$TAG_NAME/MetalHUDHelper.app.zip
+      - name: Calculate SHA256
+        id: checksum
+        run: |
+          SHA=$(shasum -a 256 MetalHUDHelper.app.zip | awk '{ print $1 }')
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Update Cask formula
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          sed -i '' "s/^  version \".*\"/  version \"$TAG_NAME\"/" Casks/metalhudhelper.rb
+          sed -i '' "s/^  sha256 \".*\"/  sha256 \"${{ steps.checksum.outputs.sha256 }}\"/" Casks/metalhudhelper.rb
+
+      - name: Commit and Push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add Casks/metalhudhelper.rb
+          git commit -m "Update metalhudhelper to ${{ github.ref_name }}"
+          git push

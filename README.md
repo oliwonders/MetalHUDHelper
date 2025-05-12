@@ -4,7 +4,7 @@ A macOS menu bar app for toggling the Apple Metal performance HUD. Avoids having
 
 ![screenshot](images/metalhudhelper.png)
 
-When you want to see the performance HUD, just enable using **MetalHUDHelper** and restart the game or application. 
+When you want to see the performance HUD, just enable using **MetalHUDHelper** and restart the game or application.
 
 The app is eliminates the need to execute these commands from the terminal:
 
