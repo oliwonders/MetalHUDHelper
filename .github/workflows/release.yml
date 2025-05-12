@@ -63,6 +63,9 @@ jobs:
         run: |
           codesign --force --options runtime --sign "$CODE_SIGN_IDENTITY" build/MetalHUDHelper.app
 
+      - name: Zip the .app Bundle for homebrew
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent build/MetalHUDHelper.app build/MetalHUDHelper.app.zip
       - name: Create DMG
         run: |
           brew install create-dmg
@@ -121,8 +124,6 @@ jobs:
             # Extract tag name without refs/tags/ prefix
             TAG=${GITHUB_REF#refs/tags/}
             
-            echo "Zipping .app for release..."
-            ditto -c -k --sequesterRsrc --keepParent build/MetalHUDHelper.app build/MetalHUDHelper.app.zip
 
             echo "Creating release for tag: $TAG"
             gh release create "$TAG" \
@@ -158,13 +159,12 @@ jobs:
         run: |
           SHA=$(shasum -a 256 MetalHUDHelper.app.zip | awk '{ print $1 }')
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
-
-      - name: Update Cask formula
+      - name: Update Cask formula with new version and checksum
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          sed -i '' "s/^  version \".*\"/  version \"$TAG_NAME\"/" Casks/metalhudhelper.rb
-          sed -i '' "s/^  sha256 \".*\"/  sha256 \"${{ steps.checksum.outputs.sha256 }}\"/" Casks/metalhudhelper.rb
-
+          RAW_TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${RAW_TAG#v}  # Strip the leading 'v'
+          sed -i '' "s|^  version \".*\"|  version \"$VERSION\"|" Casks/metalhudhelper.rb
+          sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
         run: |
           git config user.name "GitHub Actions"
