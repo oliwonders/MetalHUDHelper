@@ -1,6 +1,8 @@
 # MetalHUDHelper
 
-A macOS menu bar app for toggling the Apple Metal performance HUD. Avoids having to execute a command via the Terminal.
+[![Homebrew Cask](https://img.shields.io/badge/Homebrew-metalhudhelper-6f4e99?logo=homebrew&logoColor=white)](https://brew.sh/)
+
+A macOS menu bar app for toggling the Apple Metal performance HUD. Avoids having to execute commands via the Terminal.
 
 ![screenshot](images/metalhudhelper.png)
 
@@ -28,11 +30,23 @@ macOS 15.0 or later
 
 ## Installation
 
+You can install **MetalHUDHelper** using either of the following options:
+
+### Option 1: Manual install via dmg
+
 1. Download the latest `.dmg` from the [Releases](https://github.com/oliwonders/MetalHUDHelper/releases) page
 2. Drag **MetalHUDHelper** to your `Applications` folder
-3. Launch the app
-4. Click the menu bar icon to toggle the Metal Performance HUD on or off
-5. Restart any game or application to see the HUD
+
+### Option 2: Homebrew
+
+```sh
+brew tap oliwonders/tap
+brew install --cask metalhudhelper
+```
+
+Then launch **MetalHUDHelper** from your Applications folder.
+
+> After installing, click the menu bar icon and toggle the Metal Performance HUD on or off. Restart any game or application to see the HUD take effect.
 
 ## Support
 
