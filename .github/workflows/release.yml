@@ -140,12 +140,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Clone homebrew-tap with PAT
-        env:
-          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
-        run: |
-          git clone https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
-          cd homebrew-tap
       - name: Download .app.zip from GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -159,10 +153,19 @@ jobs:
         run: |
           SHA=$(shasum -a 256 MetalHUDHelper.app.zip | awk '{ print $1 }')
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+      - name: Clone homebrew-tap with PAT
+        env:
+          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
+        run: |
+          git clone https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
+          cd homebrew-tap
+          ls -la
       - name: Update Cask formula with new version and checksum
         run: |
           RAW_TAG=${GITHUB_REF#refs/tags/}
           VERSION=${RAW_TAG#v}  # Strip the leading 'v'
+          ls -la
+          cd homebrew-tap
           sed -i '' "s|^  version \".*\"|  version \"$VERSION\"|" Casks/metalhudhelper.rb
           sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
@@ -170,6 +173,8 @@ jobs:
         env:
           HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
         run: |
+          ls -la
+          cd homebrew-tap
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add Casks/metalhudhelper.rb
