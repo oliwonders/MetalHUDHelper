@@ -28,11 +28,11 @@ jobs:
         run: |
           security list-keychains -d user -s "$HOME/Library/Keychains/signing_temp.keychain-db" "$HOME/Library/Keychains/login.keychain-db"
 
-      - name: Show current keychain search path
-        run: security list-keychains -d user
+      # - name: Show current keychain search path
+      #   run: security list-keychains -d user
 
-      - name: List Codesigning Identities
-        run: security find-identity -v -p codesigning
+      # - name: List Codesigning Identities
+      #   run: security find-identity -v -p codesigning
 
       - name: Unlock build.keychain
         run: |
@@ -140,12 +140,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout homebrew-tap
-        uses: actions/checkout@v4
-        with:
-          repository: oliwonders/homebrew-tap
-          token: ${{ secrets.HOMEBREW_TAP_PAT }}
-
+      - name: Clone homebrew-tap with PAT
+        env:
+          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
+        run: |
+          git clone https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
+          cd homebrew-tap
       - name: Download .app.zip from GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -166,12 +166,12 @@ jobs:
           sed -i '' "s|^  version \".*\"|  version \"$VERSION\"|" Casks/metalhudhelper.rb
           sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
+        working-directory: homebrew-tap
         env:
           HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
           git add Casks/metalhudhelper.rb
           git commit -m "Update metalhudhelper to ${{ github.ref_name }}"
-          git push
+          git push origin main
