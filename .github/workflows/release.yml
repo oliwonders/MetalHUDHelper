@@ -153,13 +153,15 @@ jobs:
         run: |
           SHA=$(shasum -a 256 MetalHUDHelper.app.zip | awk '{ print $1 }')
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
-      - name: Clone homebrew-tap with PAT
-        env:
-          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
+      - name: Setup SSH
         run: |
-          git clone https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
-          cd homebrew-tap
-          ls -la
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOMEBREW_DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Clone homebrew-tap via SSH
+        run: |
+          git clone git@github.com:oliwonders/homebrew-tap.git
       - name: Update Cask formula with new version and checksum
         working-directory: homebrew-tap
         run: |
@@ -170,13 +172,9 @@ jobs:
           sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
         working-directory: homebrew-tap
-        env:
-          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
         run: |
-          ls -la
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
           git add Casks/metalhudhelper.rb
           git commit -m "Update metalhudhelper to ${{ github.ref_name }}"
           git push origin main
