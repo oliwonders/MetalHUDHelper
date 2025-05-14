@@ -166,9 +166,12 @@ jobs:
           sed -i '' "s|^  version \".*\"|  version \"$VERSION\"|" Casks/metalhudhelper.rb
           sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
+        env:
+          HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${HOMEBREW_TAP_PAT}@github.com/oliwonders/homebrew-tap.git
           git add Casks/metalhudhelper.rb
           git commit -m "Update metalhudhelper to ${{ github.ref_name }}"
           git push
