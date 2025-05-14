@@ -161,11 +161,11 @@ jobs:
           cd homebrew-tap
           ls -la
       - name: Update Cask formula with new version and checksum
+        working-directory: homebrew-tap
         run: |
           RAW_TAG=${GITHUB_REF#refs/tags/}
           VERSION=${RAW_TAG#v}  # Strip the leading 'v'
           ls -la
-          cd homebrew-tap
           sed -i '' "s|^  version \".*\"|  version \"$VERSION\"|" Casks/metalhudhelper.rb
           sed -i '' "s|^  sha256 \".*\"|  sha256 \"${{ steps.checksum.outputs.sha256 }}\"|" Casks/metalhudhelper.rb
       - name: Commit and Push
@@ -174,7 +174,6 @@ jobs:
           HOMEBREW_TAP_PAT: ${{ secrets.HOMEBREW_TAP_PAT }}
         run: |
           ls -la
-          cd homebrew-tap
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add Casks/metalhudhelper.rb
