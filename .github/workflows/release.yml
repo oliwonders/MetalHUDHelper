@@ -27,16 +27,19 @@ jobs:
       - name: Add build.keychain to search path
         run: |
           security list-keychains -d user -s "$HOME/Library/Keychains/signing_temp.keychain-db" "$HOME/Library/Keychains/login.keychain-db"
-
-      # - name: Show current keychain search path
-      #   run: security list-keychains -d user
-
-      # - name: List Codesigning Identities
-      #   run: security find-identity -v -p codesigning
-
       - name: Unlock build.keychain
         run: |
           security unlock-keychain -p "${{ secrets.CERT_P12_PASSWORD }}" "$HOME/Library/Keychains/signing_temp.keychain-db"
+
+      - name: Set version numbers from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG_NAME#v}
+          echo "Using version: $VERSION"
+
+          sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = $VERSION;/g" MetalHUDHelper.xcodeproj/project.pbxproj
+          sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = $VERSION;/g" MetalHUDHelper.xcodeproj/project.pbxproj
 
       - name: Archive Release Build
         run: |
@@ -136,8 +139,9 @@ jobs:
           fi
 
   update-cask:
+    if: startsWith(github.ref, 'refs/tags/')
     needs: build-and-publish
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Download .app.zip from GitHub Release
