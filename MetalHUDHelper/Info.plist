@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleGetInfoString</key>
 	<string>Menubar tool to toggle Apple’s Metal HUD</string>
+	<key>CFBundleIconName</key>
+	<string>MHH</string>
 	<key>LSMultipleInstancesProhibited</key>
 	<true/>
 </dict>
