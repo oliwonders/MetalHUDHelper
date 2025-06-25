@@ -184,8 +184,6 @@ struct AcknowledgmentsView: View {
         Copyright © Sindre Sorhus (<sindresorhus@gmail.com>)  
         [sindresorhus.com](https://sindresorhus.com)
 
-        **GPU Icons**  
-        Created by [Good Ware](https://www.flaticon.com/authors/good-ware) —  via [Flaticon](https://www.flaticon.com/free-icons/gpu)
         """
 
     var body: some View {

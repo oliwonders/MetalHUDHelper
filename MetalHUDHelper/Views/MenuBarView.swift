@@ -61,6 +61,8 @@ struct MenuBarView: View {
       return "Authorization required"
     }
   }
+    
+    
 
   var hudActionText: String {
     switch hudManager.hudStatus {

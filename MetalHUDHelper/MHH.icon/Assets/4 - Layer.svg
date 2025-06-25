@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>4 - Layer</title>
+    <g id="Template---App-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4---Layer" fill="#FFFFFF" fill-rule="nonzero">
+            <polygon id="Path" points="301 297 412.258824 541.571429 412.258824 362.288136 595 725 547.729412 725 449.152941 537.42615 448 725 337.894118 480.428571 337.894118 725 301 725"></polygon>
+            <polygon id="Path" points="510.940741 371.435013 557.059259 371.435013 557.059259 312 589 312 589 466 557.059259 466 557.059259 402.480106 510.940741 402.480106 510.940741 466 479 466 479 312 510.940741 312"></polygon>
+            <polygon id="Path" points="644.940741 372.435013 691.059259 372.435013 691.059259 313 723 313 723 467 691.059259 467 691.059259 403.480106 644.940741 403.480106 644.940741 467 613 467 613 313 644.940741 313"></polygon>
+        </g>
+    </g>
+</svg>
