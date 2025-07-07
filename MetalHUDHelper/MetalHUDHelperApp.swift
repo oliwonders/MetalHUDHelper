@@ -24,6 +24,7 @@ struct MetalHUDHelperApp: App {
             systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
         ) {
             MenuBarView(hudManager: hudManager)
+                .scrollContentBackground(.hidden)
         }
         .menuBarExtraStyle(.menu)
         .onChange(of: scenePhase) {
