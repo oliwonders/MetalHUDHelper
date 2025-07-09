@@ -80,20 +80,20 @@ struct AboutTab: View {
                     } label: {
                         Label("Acknowledgments", systemImage: "star")
                     }
-                    .buttonStyle(.glass)
+                    .buttonStyle(.bordered)
 
                     Button {
                         openEmail(to: "support@oliwonders.com")
                     } label: {
                         Label("Contact Me", systemImage: "envelope")
                     }
-                    .buttonStyle(.glass)
+                    .buttonStyle(.link)
                     Button {
                         openSite(address: "https://oliwonders.com")
                     } label: {
                         Label("Visit Website", systemImage: "globe")
                     }
-                    .buttonStyle(.glass)
+                    .buttonStyle(.link)
                 } else {
                     Button {
                         showAcknowledgments = true
@@ -105,13 +105,15 @@ struct AboutTab: View {
                         openEmail(to: "support@oliwonders.com")
                     } label: {
                         Label("Contact Me", systemImage: "envelope")
-                    }
+                            
+                    }.buttonStyle(.link)
 
                     Button {
                         openSite(address: "https://oliwonders.com")
                     } label: {
                         Label("Visit Website", systemImage: "globe")
                     }
+                    .buttonStyle(.link)
 
                 }
 
