@@ -25,7 +25,7 @@ struct MetalHUDHelperApp: App {
         ) {
             if #available(macOS 26.0, *) {
                 MenuBarView(hudManager: hudManager)
-                    .glassEffect(.regular, isEnabled: true)
+                    .glassEffect(.regular)
             } else {
                 MenuBarView(hudManager: hudManager)
             }

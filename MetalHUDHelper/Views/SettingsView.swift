@@ -25,7 +25,7 @@ struct SettingsView: View {
             }
         }
         .scenePadding()
-        .frame(maxWidth: 450, minHeight: 100)
+        .frame(maxWidth: 470, minHeight: 100)
     }
 }
 
@@ -75,30 +75,42 @@ struct AboutTab: View {
             Divider()
             HStack(alignment: .center, spacing: 16) {
                 if #available(macOS 26.0, *) {
-                    Button("Acknowledgments") {
+                    Button {
                         showAcknowledgments = true
+                    } label: {
+                        Label("Acknowledgments", systemImage: "star")
                     }
                     .buttonStyle(.glass)
 
-                    Button("Contact Me") {
+                    Button {
                         openEmail(to: "support@oliwonders.com")
+                    } label: {
+                        Label("Contact Me", systemImage: "envelope")
                     }
                     .buttonStyle(.glass)
-                    Button("My Site") {
+                    Button {
                         openSite(address: "https://oliwonders.com")
+                    } label: {
+                        Label("Visit Website", systemImage: "globe")
                     }
                     .buttonStyle(.glass)
                 } else {
-                    Button("Acknowledgments") {
+                    Button {
                         showAcknowledgments = true
+                    } label: {
+                        Label("Acknowledgments", systemImage: "star")
                     }
 
-                    Button("Contact Me") {
+                    Button {
                         openEmail(to: "support@oliwonders.com")
+                    } label: {
+                        Label("Contact Me", systemImage: "envelope")
                     }
 
-                    Button("My Site") {
+                    Button {
                         openSite(address: "https://oliwonders.com")
+                    } label: {
+                        Label("Visit Website", systemImage: "globe")
                     }
 
                 }
@@ -236,3 +248,4 @@ struct SettingsView_Previews: PreviewProvider {
         SettingsView(selectedTab: .constant(0))
     }
 }
+

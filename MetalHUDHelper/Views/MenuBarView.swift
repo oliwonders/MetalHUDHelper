@@ -12,8 +12,13 @@ struct MenuBarView: View {
   @State private var showingAuthOverlay: Bool = false
 
   var body: some View {
-    Text(statusText)
-      .font(.headline)
+    Label {
+      Text(statusText)
+    } icon: {
+      Image(systemName: statusImage)
+        .foregroundStyle(colorForStatus)
+    }
+    .font(.headline)
     Divider()
     Button(hudActionText) {
       if hudManager.hudStatus == .needsAuth {
@@ -46,6 +51,21 @@ struct MenuBarView: View {
           showingAuthOverlay = false
         }
       )
+    }
+  }
+
+    var statusImage: String {
+        switch hudManager.hudStatus {
+        case .enabled: return "checkmark.circle.fill"
+        case .disabled: return "xmark.circle.fill"
+        default: return  "question.circle.fill"
+        }
+    }
+  var colorForStatus: Color {
+    switch hudManager.hudStatus {
+    case .enabled: return .green
+    case .disabled: return .red
+    default: return .gray
     }
   }
 
