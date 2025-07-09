@@ -17,14 +17,18 @@ struct MetalHUDHelperApp: App {
             hudManager.hudStatus == .enabled
             ? "MenuBarIconMono" : "MenuBarIconMono"
     }
-    
+
     var body: some Scene {
         MenuBarExtra(
             "Metal HUD Helper",
             systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
         ) {
-            MenuBarView(hudManager: hudManager)
-                .scrollContentBackground(.hidden)
+            if #available(macOS 26.0, *) {
+                MenuBarView(hudManager: hudManager)
+                    .glassEffect(.regular, isEnabled: true)
+            } else {
+                MenuBarView(hudManager: hudManager)
+            }
         }
         .menuBarExtraStyle(.menu)
         .onChange(of: scenePhase) {

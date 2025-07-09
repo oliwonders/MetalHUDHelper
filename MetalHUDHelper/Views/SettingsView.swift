@@ -74,14 +74,33 @@ struct AboutTab: View {
             }
             Divider()
             HStack(alignment: .center, spacing: 16) {
-                Button("Acknowledgments") {
-                    showAcknowledgments = true
-                }
-                Button("Contact Me") {
-                    openEmail(to: "support@oliwonders.com")
-                }
-                Button("My Site") {
-                    openSite(address: "https://oliwonders.com")
+                if #available(macOS 26.0, *) {
+                    Button("Acknowledgments") {
+                        showAcknowledgments = true
+                    }
+                    .buttonStyle(.glass)
+
+                    Button("Contact Me") {
+                        openEmail(to: "support@oliwonders.com")
+                    }
+                    .buttonStyle(.glass)
+                    Button("My Site") {
+                        openSite(address: "https://oliwonders.com")
+                    }
+                    .buttonStyle(.glass)
+                } else {
+                    Button("Acknowledgments") {
+                        showAcknowledgments = true
+                    }
+
+                    Button("Contact Me") {
+                        openEmail(to: "support@oliwonders.com")
+                    }
+
+                    Button("My Site") {
+                        openSite(address: "https://oliwonders.com")
+                    }
+
                 }
 
             }
@@ -115,22 +134,24 @@ struct AboutTab: View {
     }
 }
 
-
 struct CustomSettingsLink: View {
-    @AppStorage("selectedSettingsTab") private var selectedSettingsTab = SettingsTab.general
+    @AppStorage("selectedSettingsTab") private var selectedSettingsTab =
+        SettingsTab.general
     @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         Button("Settings...") {
             selectedSettingsTab = .general
-         
+
             NSApp.activate(ignoringOtherApps: true)
             openSettings()
-            
+
             // Force window to front with slight delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 NSApp.windows.forEach { window in
-                    if window.title.contains("Settings") || window.title.contains("Preferences") {
+                    if window.title.contains("Settings")
+                        || window.title.contains("Preferences")
+                    {
                         window.makeKeyAndOrderFront(nil)
                         window.orderFrontRegardless()
                     }
@@ -140,7 +161,6 @@ struct CustomSettingsLink: View {
         .keyboardShortcut(",", modifiers: [.command])
     }
 }
-
 
 struct AboutSettingsButton: View {
     @AppStorage("selectedSettingsTab") private var selectedSettingsTab =
