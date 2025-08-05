@@ -34,10 +34,41 @@ struct MetalHUDHelperApp: App {
         .onChange(of: scenePhase) {
             if scenePhase == .active {
                 hudManager.checkHUDStatus()
+                updateSharedStatus()
             }
+        }
+        .onOpenURL { url in
+            handleURLScheme(url)
         }
         Settings {
             SettingsView(selectedTab: $selectedSettingsTab)
         }
+    }
+    
+    private func handleURLScheme(_ url: URL) {
+        guard url.scheme == "metalhudhelper" else { return }
+        
+        switch url.host {
+        case "open":
+            // Widget tapped - bring app to foreground and update status
+            NSApp.activate(ignoringOtherApps: true)
+            hudManager.checkHUDStatus()
+            updateSharedStatus()
+        default:
+            break
+        }
+    }
+    
+    private func updateSharedStatus() {
+        let sharedStatus: SharedHUDStatus
+        switch hudManager.hudStatus {
+        case .enabled:
+            sharedStatus = .enabled
+        case .disabled:
+            sharedStatus = .disabled
+        default:
+            sharedStatus = .unknown
+        }
+        SharedHUDStatusManager.setCurrentStatus(sharedStatus)
     }
 }

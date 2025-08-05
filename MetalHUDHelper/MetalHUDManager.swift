@@ -45,6 +45,7 @@ class MetalHUDManager {
         } else {
             // Toggle succeeded, update status
             hudStatus = hudStatus == .enabled ? .disabled : .enabled
+            updateSharedStatus()
         }
     }
 
@@ -64,6 +65,7 @@ class MetalHUDManager {
 
             if error == nil {
                 hudStatus = newValue == "YES" ? .enabled : .disabled
+                updateSharedStatus()
             }
         }
     }
@@ -115,5 +117,18 @@ extension MetalHUDManager {
             print("Error executing command: \(error)")
             return (false, "")
         }
+    }
+    
+    private func updateSharedStatus() {
+        let sharedStatus: SharedHUDStatus
+        switch hudStatus {
+        case .enabled:
+            sharedStatus = .enabled
+        case .disabled:
+            sharedStatus = .disabled
+        default:
+            sharedStatus = .unknown
+        }
+        SharedHUDStatusManager.setCurrentStatus(sharedStatus)
     }
 }

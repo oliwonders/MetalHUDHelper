@@ -5,4 +5,5 @@ build/
 *.xcworkspace
 *.xcodeproj/project.xcworkspace
 *.xcodeproj/xcuserdata
-
+CLAUDE.local.md
+*.claude
