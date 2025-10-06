@@ -1,18 +1,10 @@
-//
-//  MetalHUDWidget.swift
-//  MetalHUDHelperWidget
-//
-//  Control Center widget for Metal HUD Helper
-//
-
 import WidgetKit
 import SwiftUI
-import AppIntents
-import AppKit
 
-struct MetalHUDWidget: Widget {
-    let kind: String = "MetalHUDWidget"
+struct MetalHUDHelperWidget: Widget {
+    let kind: String = "MetalHUDHelperWidget"
 
+    
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MetalHUDProvider()) { entry in
             MetalHUDWidgetView(entry: entry)
@@ -30,12 +22,18 @@ struct MetalHUDProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (MetalHUDEntry) -> ()) {
         let status = SharedHUDStatusManager.getCurrentStatus()
-        let entry = MetalHUDEntry(date: Date(), status: status)
+        let entry: MetalHUDEntry
+        if context.isPreview {
+            entry = MetalHUDEntry(date: Date(), status: .unknown)
+        }
+        else{
+            entry = MetalHUDEntry(date: Date(), status: status)
+        }
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<MetalHUDEntry>) -> ()) {
-        let currentStatus = SharedHUDStatusManager.getCurrentStatus() 
+        let currentStatus = SharedHUDStatusManager.getCurrentStatus()
         let entry = MetalHUDEntry(date: Date(), status: currentStatus)
         
         // Update every 30 seconds
@@ -45,10 +43,11 @@ struct MetalHUDProvider: TimelineProvider {
     }
 }
 
-struct MetalHUDEntry: TimelineEntry {
-    let date: Date
-    let status: SharedHUDStatus
-}
+    
+    struct MetalHUDEntry: TimelineEntry {
+        let date: Date
+        let status: SharedHUDStatus
+    }
 
 struct MetalHUDWidgetView: View {
     let entry: MetalHUDEntry
@@ -91,10 +90,9 @@ struct OpenMetalHUDAppIntent: AppIntent {
         return .result()
     }
 }
-
-@main
-struct MetalHUDWidgetBundle: WidgetBundle {
-    var body: some Widget {
-        MetalHUDWidget()
-    }
-}
+
+#Preview(as: .systemMedium, widget: {
+    MetalHUDHelperWidget()
+}, timeline: {
+    MetalHUDEntry(date: Date(), relevance: nil, hero: .spouty)
+})

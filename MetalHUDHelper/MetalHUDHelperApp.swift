@@ -23,9 +23,9 @@ struct MetalHUDHelperApp: App {
             "Metal HUD Helper",
             systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
         ) {
-            if #available(macOS 26.0, *) {
+             if #available(macOS 26.0, *) {
                 MenuBarView(hudManager: hudManager)
-                    .glassEffect(.regular)
+                     .glassEffect(.regular)
             } else {
                 MenuBarView(hudManager: hudManager)
             }
@@ -37,9 +37,17 @@ struct MetalHUDHelperApp: App {
                 updateSharedStatus()
             }
         }
-        .onOpenURL { url in
-            handleURLScheme(url)
+        
+        // Hidden window to handle URL schemes
+        WindowGroup {
+            EmptyView()
         }
+        .windowStyle(.hiddenTitleBar)
+        .windowResizability(.contentSize)
+        .defaultSize(width: 0, height: 0)
+       // .onOpenURL(perform: handleURLScheme)
+        .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
+        
         Settings {
             SettingsView(selectedTab: $selectedSettingsTab)
         }
@@ -54,6 +62,13 @@ struct MetalHUDHelperApp: App {
             NSApp.activate(ignoringOtherApps: true)
             hudManager.checkHUDStatus()
             updateSharedStatus()
+            
+            // Close any windows that might have opened from URL handling
+            for window in NSApp.windows {
+                if window.contentView?.subviews.isEmpty == true {
+                    window.close()
+                }
+            }
         default:
             break
         }

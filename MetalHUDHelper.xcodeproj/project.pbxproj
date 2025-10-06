@@ -9,10 +9,40 @@
 /* Begin PBXBuildFile section */
 		633CE0F02DC00BAB0051AFF1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 633CE0EF2DC00BAB0051AFF1 /* LaunchAtLogin */; };
 		633CE0F22DC037D70051AFF1 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 633CE0F12DC037D70051AFF1 /* ExportOptions.plist */; };
+		635B0BF12E42BAD20002BBB4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */; };
+		635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */; };
+		635B0C012E42BAD30002BBB4 /* MetalHUDHelperWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		635B0BFF2E42BAD30002BBB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63E5AC2E2D974CE50084B47E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 635B0BEF2E42BAD10002BBB4;
+			remoteInfo = MetalHUDHelperWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		635B0C062E42BAD30002BBB4 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				635B0C012E42BAD30002BBB4 /* MetalHUDHelperWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		633CE0F12DC037D70051AFF1 /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
+		635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MetalHUDHelperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		63E5AC362D974CE50084B47E /* MetalHUDHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalHUDHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -27,6 +57,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		635B0BD72E42B4AC0002BBB4 /* MetalHUDHelperWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MetalHUDHelperWidget;
+			sourceTree = "<group>";
+		};
 		63E5AC382D974CE50084B47E /* MetalHUDHelper */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -38,6 +73,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		635B0BED2E42BAD10002BBB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */,
+				635B0BF12E42BAD20002BBB4 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63E5AC332D974CE50084B47E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -49,10 +93,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		635B0BD22E42B4AC0002BBB4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */,
+				635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		63E5AC2D2D974CE50084B47E = {
 			isa = PBXGroup;
 			children = (
 				63E5AC382D974CE50084B47E /* MetalHUDHelper */,
+				635B0BD72E42B4AC0002BBB4 /* MetalHUDHelperWidget */,
+				635B0BD22E42B4AC0002BBB4 /* Frameworks */,
 				63E5AC372D974CE50084B47E /* Products */,
 				633CE0F12DC037D70051AFF1 /* ExportOptions.plist */,
 			);
@@ -62,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				63E5AC362D974CE50084B47E /* MetalHUDHelper.app */,
+				635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,6 +125,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		635B0BEF2E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 635B0C022E42BAD30002BBB4 /* Build configuration list for PBXNativeTarget "MetalHUDHelperWidgetExtension" */;
+			buildPhases = (
+				635B0BEC2E42BAD10002BBB4 /* Sources */,
+				635B0BED2E42BAD10002BBB4 /* Frameworks */,
+				635B0BEE2E42BAD10002BBB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetalHUDHelperWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MetalHUDHelperWidgetExtension;
+			productReference = 635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		63E5AC352D974CE50084B47E /* MetalHUDHelper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63E5AC452D974CE70084B47E /* Build configuration list for PBXNativeTarget "MetalHUDHelper" */;
@@ -76,10 +151,12 @@
 				63E5AC322D974CE50084B47E /* Sources */,
 				63E5AC332D974CE50084B47E /* Frameworks */,
 				63E5AC342D974CE50084B47E /* Resources */,
+				635B0C062E42BAD30002BBB4 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				635B0C002E42BAD30002BBB4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				63E5AC382D974CE50084B47E /* MetalHUDHelper */,
@@ -99,9 +176,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					635B0BEF2E42BAD10002BBB4 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					63E5AC352D974CE50084B47E = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -125,11 +205,19 @@
 			projectRoot = "";
 			targets = (
 				63E5AC352D974CE50084B47E /* MetalHUDHelper */,
+				635B0BEF2E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		635B0BEE2E42BAD10002BBB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63E5AC342D974CE50084B47E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,6 +229,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		635B0BEC2E42BAD10002BBB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63E5AC322D974CE50084B47E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,7 +245,85 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		635B0C002E42BAD30002BBB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 635B0BEF2E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension */;
+			targetProxy = 635B0BFF2E42BAD30002BBB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		635B0C032E42BAD30002BBB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MetalHUDHelperWidget/MetalHUDHelperWidget.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = ZV389CJJBX;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalHUDHelperWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelperWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oliwonders.MetalHUDHelper.MetalHUDHelperWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		635B0C042E42BAD30002BBB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MetalHUDHelperWidget/MetalHUDHelperWidget.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = ZV389CJJBX;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalHUDHelperWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelperWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oliwonders.MetalHUDHelper.MetalHUDHelperWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
 		63E5AC432D974CE70084B47E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -285,7 +458,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MetalHUDHelper/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV389CJJBX;
@@ -307,6 +480,7 @@
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oliwonders.MetalHUDHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 			};
@@ -322,7 +496,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MetalHUDHelper/Preview Content\"";
 				DEVELOPMENT_TEAM = ZV389CJJBX;
@@ -344,6 +518,7 @@
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oliwonders.MetalHUDHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 			};
@@ -352,6 +527,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		635B0C022E42BAD30002BBB4 /* Build configuration list for PBXNativeTarget "MetalHUDHelperWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				635B0C032E42BAD30002BBB4 /* Debug */,
+				635B0C042E42BAD30002BBB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		63E5AC312D974CE50084B47E /* Build configuration list for PBXProject "MetalHUDHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

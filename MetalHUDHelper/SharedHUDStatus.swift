@@ -39,6 +39,7 @@ public enum SharedHUDStatus: String, CaseIterable {
     }
 }
 
+@MainActor
 public class SharedHUDStatusManager {
     private static let userDefaults = UserDefaults(suiteName: "group.com.oliwonders.MetalHUDHelper")
     private static let statusKey = "MetalHUDStatus"
