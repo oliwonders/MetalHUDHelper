@@ -23,12 +23,8 @@ struct MetalHUDHelperApp: App {
             "Metal HUD Helper",
             systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
         ) {
-            if #available(macOS 26.0, *) {
                 MenuBarView(hudManager: hudManager)
-                    .glassEffect(.regular)
-            } else {
-                MenuBarView(hudManager: hudManager)
-            }
+        
         }
         .menuBarExtraStyle(.menu)
         .onChange(of: scenePhase) {
