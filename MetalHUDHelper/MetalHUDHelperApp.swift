@@ -24,7 +24,7 @@ struct MetalHUDHelperApp: App {
             systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
         ) {
                 MenuBarView(hudManager: hudManager)
-           
+            
         }
         .menuBarExtraStyle(.menu)
         .onChange(of: scenePhase) {

@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		633CE0F02DC00BAB0051AFF1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 633CE0EF2DC00BAB0051AFF1 /* LaunchAtLogin */; };
 		633CE0F22DC037D70051AFF1 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 633CE0F12DC037D70051AFF1 /* ExportOptions.plist */; };
 		635B0BF12E42BAD20002BBB4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */; };
 		635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */; };
 		635B0C012E42BAD30002BBB4 /* MetalHUDHelperWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		63ACE1272E95BF310068AA9B /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 63ACE1262E95BF310068AA9B /* LaunchAtLogin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63ACE1272E95BF310068AA9B /* LaunchAtLogin in Frameworks */,
 				635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */,
 				635B0BF12E42BAD20002BBB4 /* WidgetKit.framework in Frameworks */,
 			);
@@ -86,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				633CE0F02DC00BAB0051AFF1 /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +139,7 @@
 			);
 			name = MetalHUDHelperWidgetExtension;
 			packageProductDependencies = (
+				63ACE1262E95BF310068AA9B /* LaunchAtLogin */,
 			);
 			productName = MetalHUDHelperWidgetExtension;
 			productReference = 635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */;
@@ -163,7 +164,6 @@
 			);
 			name = MetalHUDHelper;
 			packageProductDependencies = (
-				633CE0EF2DC00BAB0051AFF1 /* LaunchAtLogin */,
 			);
 			productName = MetalHUDHelper;
 			productReference = 63E5AC362D974CE50084B47E /* MetalHUDHelper.app */;
@@ -197,7 +197,7 @@
 			mainGroup = 63E5AC2D2D974CE50084B47E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				633CE0EE2DC00BAB0051AFF1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+				63ACE1252E95BF310068AA9B /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63E5AC372D974CE50084B47E /* Products */;
@@ -557,7 +557,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		633CE0EE2DC00BAB0051AFF1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+		63ACE1252E95BF310068AA9B /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
 			requirement = {
@@ -568,9 +568,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		633CE0EF2DC00BAB0051AFF1 /* LaunchAtLogin */ = {
+		63ACE1262E95BF310068AA9B /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 633CE0EE2DC00BAB0051AFF1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			package = 63ACE1252E95BF310068AA9B /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
 			productName = LaunchAtLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
