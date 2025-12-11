@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SharedHUDStatus: String, CaseIterable {
+public enum SharedHUDStatus: String, CaseIterable, Sendable {
     case unknown = "unknown"
     case enabled = "enabled" 
     case disabled = "disabled"
@@ -41,8 +41,11 @@ public enum SharedHUDStatus: String, CaseIterable {
 
 @MainActor
 public class SharedHUDStatusManager {
-    private static let userDefaults = UserDefaults(suiteName: "group.com.oliwonders.MetalHUDHelper")
     private static let statusKey = "MetalHUDStatus"
+    
+    private static var userDefaults: UserDefaults? {
+        UserDefaults(suiteName: "group.com.oliwonders.MetalHUDHelper")
+    }
     
     public static func getCurrentStatus() -> SharedHUDStatus {
         guard let userDefaults = userDefaults,

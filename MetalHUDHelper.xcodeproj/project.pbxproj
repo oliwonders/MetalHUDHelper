@@ -12,6 +12,8 @@
 		635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */; };
 		635B0C012E42BAD30002BBB4 /* MetalHUDHelperWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		63ACE1272E95BF310068AA9B /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 63ACE1262E95BF310068AA9B /* LaunchAtLogin */; };
+		63CD97C42E970ED800F91B4D /* MetalHUDControlWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD97C32E970ED800F91B4D /* MetalHUDControlWidget.swift */; };
+		63CD97CA2E97135C00F91B4D /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 63CD97C92E97135C00F91B4D /* LaunchAtLogin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,7 @@
 		635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MetalHUDHelperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CD97C32E970ED800F91B4D /* MetalHUDControlWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalHUDControlWidget.swift; sourceTree = "<group>"; };
 		63E5AC362D974CE50084B47E /* MetalHUDHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalHUDHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -54,11 +57,21 @@
 			);
 			target = 63E5AC352D974CE50084B47E /* MetalHUDHelper */;
 		};
+		63CD97C72E970F4D00F91B4D /* Exceptions for "MetalHUDHelperWidget" folder in "MetalHUDHelperWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MetalHUDControlWidget.swift,
+			);
+			target = 635B0BEF2E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		635B0BD72E42B4AC0002BBB4 /* MetalHUDHelperWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				63CD97C72E970F4D00F91B4D /* Exceptions for "MetalHUDHelperWidget" folder in "MetalHUDHelperWidgetExtension" target */,
+			);
 			path = MetalHUDHelperWidget;
 			sourceTree = "<group>";
 		};
@@ -87,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63CD97CA2E97135C00F91B4D /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +124,7 @@
 				635B0BD22E42B4AC0002BBB4 /* Frameworks */,
 				63E5AC372D974CE50084B47E /* Products */,
 				633CE0F12DC037D70051AFF1 /* ExportOptions.plist */,
+				63CD97C32E970ED800F91B4D /* MetalHUDControlWidget.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -164,6 +179,7 @@
 			);
 			name = MetalHUDHelper;
 			packageProductDependencies = (
+				63CD97C92E97135C00F91B4D /* LaunchAtLogin */,
 			);
 			productName = MetalHUDHelper;
 			productReference = 63E5AC362D974CE50084B47E /* MetalHUDHelper.app */;
@@ -181,6 +197,7 @@
 				TargetAttributes = {
 					635B0BEF2E42BAD10002BBB4 = {
 						CreatedOnToolsVersion = 26.0;
+						LastSwiftMigration = 2600;
 					};
 					63E5AC352D974CE50084B47E = {
 						CreatedOnToolsVersion = 16.2;
@@ -240,6 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63CD97C42E970ED800F91B4D /* MetalHUDControlWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +277,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalHUDHelperWidget/MetalHUDHelperWidget.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -284,6 +303,8 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalHUDHelperWidget/MetalHUDHelperWidgetExtension-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 			};
@@ -294,6 +315,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalHUDHelperWidget/MetalHUDHelperWidget.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -319,6 +341,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalHUDHelperWidget/MetalHUDHelperWidgetExtension-Bridging-Header.h";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 			};
@@ -387,6 +410,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -445,6 +469,7 @@
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -569,6 +594,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		63ACE1262E95BF310068AA9B /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63ACE1252E95BF310068AA9B /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
+		};
+		63CD97C92E97135C00F91B4D /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63ACE1252E95BF310068AA9B /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
 			productName = LaunchAtLogin;

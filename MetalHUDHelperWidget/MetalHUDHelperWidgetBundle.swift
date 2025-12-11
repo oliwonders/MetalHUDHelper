@@ -10,8 +10,14 @@ import SwiftUI
 
 @main
 struct MetalHUDHelperWidgetBundle: WidgetBundle {
+    @WidgetBundleBuilder
     var body: some Widget {
+        // Desktop widget for all macOS versions
         MetalHUDHelperWidget()
-      //  MetalHUDHelperWidgetControl()
+        
+        // Control widget for macOS 26+ (Control Center integration)
+        if #available(macOS 26.0, iOS 18.0, *) {
+            MetalHUDControlWidget()
+        }
     }
 }

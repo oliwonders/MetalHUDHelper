@@ -1,5 +1,6 @@
 import WidgetKit
 import SwiftUI
+import Foundation
 
 struct MetalHUDHelperWidget: Widget {
     let kind: String = "MetalHUDHelperWidget"
@@ -86,13 +87,25 @@ struct OpenMetalHUDAppIntent: AppIntent {
             throw AppIntentError.failed(message: "Invalid URL scheme")
         }
         
-        await NSWorkspace.shared.open(url)
+        // Use proper async method for opening URLs from widget extensions
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = true
+        
+        do {
+            try await NSWorkspace.shared.open(url, configuration: configuration)
+        } catch {
+            print("Failed to open app: \(error)")
+            throw AppIntentError.failed(message: "Could not open Metal HUD Helper app")
+        }
+        
         return .result()
     }
 }
 
-#Preview(as: .systemMedium, widget: {
+#Preview(as: .systemSmall) {
     MetalHUDHelperWidget()
-}, timeline: {
-    MetalHUDEntry(date: Date(), relevance: nil, hero: .spouty)
-})
+} timeline: {
+    MetalHUDEntry(date: Date(), status: .enabled)
+    MetalHUDEntry(date: Date().addingTimeInterval(60), status: .disabled)
+    MetalHUDEntry(date: Date().addingTimeInterval(120), status: .unknown)
+}
