@@ -17,7 +17,6 @@ class MetalHUDManager {
     private var logPipe: Pipe?
     private var lastFPSUpdate: Date = .distantPast
     private var workspaceObserver: NSObjectProtocol?
-    private let logProcessingQueue = DispatchQueue(label: "com.oliwonders.metalhudhelper.logprocessing", qos: .utility)
 
     init() {
         checkHUDStatus()
@@ -170,11 +169,8 @@ class MetalHUDManager {
             guard !data.isEmpty else { return }
             
             if let output = String(data: data, encoding: .utf8) {
-                // Process log output on a serial queue to avoid race conditions
-                self.logProcessingQueue.async {
-                    Task { @MainActor in
-                        self.parseFPSFromLog(output)
-                    }
+                Task { @MainActor in
+                    self.parseFPSFromLog(output)
                 }
             }
         }
@@ -195,9 +191,13 @@ class MetalHUDManager {
         
         print("Stopping FPS monitoring...")
         
-        // Clear readability handler
+        // Clear readability handler safely
         if let pipe = logPipe {
-            pipe.fileHandleForReading.readabilityHandler = nil
+            do {
+                pipe.fileHandleForReading.readabilityHandler = nil
+            } catch {
+                // File handle may already be closed, ignore error
+            }
         }
         
         // Terminate the process
@@ -218,12 +218,10 @@ class MetalHUDManager {
         guard now.timeIntervalSince(lastFPSUpdate) >= 1.0 else { return }
         
         // Regex patterns to match FPS values
-        // Look for patterns like "fps: 60.0", "FPS: 60", "60 fps", etc.
+        // Using case-insensitive matching, so simplified patterns cover all variants
         let patterns = [
-            #"fps[:\s]+(\d+\.?\d*)"#,
-            #"FPS[:\s]+(\d+\.?\d*)"#,
-            #"(\d+\.?\d*)\s*fps"#,
-            #"(\d+\.?\d*)\s*FPS"#
+            #"fps[:\s]+(\d+\.?\d*)"#,  // Matches "fps: 60", "FPS 60", etc.
+            #"(\d+\.?\d*)\s*fps"#       // Matches "60 fps", "60 FPS", etc.
         ]
         
         for pattern in patterns {
