@@ -31,6 +31,7 @@ struct SettingsView: View {
 
 struct GeneralSettingsTab: View {
     @AppStorage("startAtLogin") private var startAtLogin = false
+    @AppStorage("showFPSInMenuBar") private var showFPSInMenuBar = false
 
     var body: some View {
         Form {
@@ -38,6 +39,16 @@ struct GeneralSettingsTab: View {
                 LaunchAtLogin.Toggle("Start Metal HUD Helper at login")
                 Text(
                     "Automatically launch the app when you sign in to your Mac."
+                )
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .padding(.leading, 4)
+            }
+            
+            Section {
+                Toggle("Show FPS in menu bar", isOn: $showFPSInMenuBar)
+                Text(
+                    "Display real-time FPS for the frontmost Metal app in the menu bar (requires Metal HUD to be enabled)."
                 )
                 .font(.footnote)
                 .foregroundColor(.secondary)

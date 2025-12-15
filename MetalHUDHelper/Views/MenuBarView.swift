@@ -10,6 +10,7 @@ import SwiftUI
 struct MenuBarView: View {
   @Bindable var hudManager: MetalHUDManager
   @State private var showingAuthOverlay: Bool = false
+  @AppStorage("showFPSInMenuBar") private var showFPSInMenuBar = false
 
   var body: some View {
     Label {
@@ -19,6 +20,38 @@ struct MenuBarView: View {
         .foregroundStyle(colorForStatus)
     }
     .font(.headline)
+    
+    // Show FPS info if monitoring is enabled
+    if showFPSInMenuBar {
+      if hudManager.hudStatus == .enabled {
+        if let fps = hudManager.currentFPS, let appName = hudManager.frontmostAppName {
+          Label {
+            Text("\(appName): \(fps) FPS")
+          } icon: {
+            Image(systemName: "speedometer")
+              .foregroundStyle(.blue)
+          }
+          .font(.subheadline)
+        } else {
+          Label {
+            Text("Monitoring for FPS data...")
+          } icon: {
+            Image(systemName: "antenna.radiowaves.left.and.right")
+              .foregroundStyle(.orange)
+          }
+          .font(.subheadline)
+        }
+      } else {
+        Label {
+          Text("Enable Metal HUD to see FPS")
+        } icon: {
+          Image(systemName: "info.circle")
+            .foregroundStyle(.secondary)
+        }
+        .font(.subheadline)
+      }
+    }
+    
     Divider()
     Button(hudActionText) {
       if hudManager.hudStatus == .needsAuth {

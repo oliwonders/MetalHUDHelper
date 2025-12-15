@@ -1,14 +1,34 @@
 import AppKit
 import Foundation
+import SwiftUI
 
 @MainActor
 @Observable
 class MetalHUDManager {
 
     var hudStatus: HUDStatus = .unknown
+    var currentFPS: Int?
+    var frontmostAppName: String?
+    
+    @ObservationIgnored
+    @AppStorage("showFPSInMenuBar") private var showFPSInMenuBar = false
+    
+    private var logMonitor: Process?
+    private var logPipe: Pipe?
+    private var lastFPSUpdate: Date = .distantPast
+    private var workspaceObserver: NSObjectProtocol?
 
     init() {
         checkHUDStatus()
+        setupFrontmostAppTracking()
+        startMonitoringIfNeeded()
+    }
+    
+    deinit {
+        stopFPSMonitoring()
+        if let observer = workspaceObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+        }
     }
 
     // MARK: - public functions
@@ -45,6 +65,7 @@ class MetalHUDManager {
         } else {
             // Toggle succeeded, update status
             hudStatus = hudStatus == .enabled ? .disabled : .enabled
+            updateMonitoringState()
         }
     }
 
@@ -64,6 +85,7 @@ class MetalHUDManager {
 
             if error == nil {
                 hudStatus = newValue == "YES" ? .enabled : .disabled
+                updateMonitoringState()
             }
         }
     }
@@ -78,6 +100,147 @@ class MetalHUDManager {
             print("Opening Console.app with Metal filter")
         } catch {
             print("Error opening Console.app: \(error)")
+        }
+    }
+    
+    // MARK: - FPS Monitoring
+    
+    func startMonitoringIfNeeded() {
+        if showFPSInMenuBar && hudStatus == .enabled {
+            startFPSMonitoring()
+        }
+    }
+    
+    func updateMonitoringState() {
+        if showFPSInMenuBar && hudStatus == .enabled {
+            if logMonitor == nil {
+                startFPSMonitoring()
+            }
+        } else {
+            stopFPSMonitoring()
+        }
+    }
+    
+    private func setupFrontmostAppTracking() {
+        // Update initial frontmost app
+        updateFrontmostApp()
+        
+        // Listen for app activation changes
+        workspaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateFrontmostApp()
+        }
+    }
+    
+    private func updateFrontmostApp() {
+        if let frontApp = NSWorkspace.shared.frontmostApplication {
+            frontmostAppName = frontApp.localizedName
+        } else {
+            frontmostAppName = nil
+        }
+    }
+    
+    func startFPSMonitoring() {
+        // Don't start if already running
+        guard logMonitor == nil else { return }
+        
+        print("Starting FPS monitoring...")
+        
+        let process = Process()
+        process.launchPath = "/usr/bin/log"
+        process.arguments = [
+            "stream",
+            "--predicate", "subsystem CONTAINS 'metal' OR subsystem CONTAINS 'Metal'",
+            "--style", "compact"
+        ]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe() // Ignore stderr
+        
+        // Set up async reading
+        let fileHandle = pipe.fileHandleForReading
+        fileHandle.readabilityHandler = { [weak self] handle in
+            guard let self = self else { return }
+            let data = handle.availableData
+            guard !data.isEmpty else { return }
+            
+            if let output = String(data: data, encoding: .utf8) {
+                Task { @MainActor in
+                    self.parseFPSFromLog(output)
+                }
+            }
+        }
+        
+        do {
+            try process.run()
+            self.logMonitor = process
+            self.logPipe = pipe
+            print("FPS monitoring started successfully")
+        } catch {
+            print("Error starting FPS monitoring: \(error)")
+            currentFPS = nil
+        }
+    }
+    
+    func stopFPSMonitoring() {
+        guard let process = logMonitor else { return }
+        
+        print("Stopping FPS monitoring...")
+        
+        // Clear readability handler
+        if let pipe = logPipe {
+            pipe.fileHandleForReading.readabilityHandler = nil
+        }
+        
+        // Terminate the process
+        if process.isRunning {
+            process.terminate()
+            // Wait briefly for clean termination
+            DispatchQueue.global().async {
+                process.waitUntilExit()
+            }
+        }
+        
+        logMonitor = nil
+        logPipe = nil
+        currentFPS = nil
+        
+        print("FPS monitoring stopped")
+    }
+    
+    private func parseFPSFromLog(_ logOutput: String) {
+        // Debounce updates - only update once per second
+        let now = Date()
+        guard now.timeIntervalSince(lastFPSUpdate) >= 1.0 else { return }
+        
+        // Regex patterns to match FPS values
+        // Look for patterns like "fps: 60.0", "FPS: 60", "60 fps", etc.
+        let patterns = [
+            #"fps[:\s]+(\d+\.?\d*)"#,
+            #"FPS[:\s]+(\d+\.?\d*)"#,
+            #"(\d+\.?\d*)\s*fps"#,
+            #"(\d+\.?\d*)\s*FPS"#
+        ]
+        
+        for pattern in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let nsString = logOutput as NSString
+                if let match = regex.firstMatch(in: logOutput, range: NSRange(location: 0, length: nsString.length)) {
+                    if match.numberOfRanges > 1 {
+                        let fpsString = nsString.substring(with: match.range(at: 1))
+                        if let fpsValue = Double(fpsString) {
+                            currentFPS = Int(round(fpsValue))
+                            lastFPSUpdate = now
+                            print("Detected FPS: \(currentFPS ?? 0)")
+                            return
+                        }
+                    }
+                }
+            }
         }
     }
 }

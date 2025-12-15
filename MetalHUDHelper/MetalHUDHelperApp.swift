@@ -7,6 +7,7 @@ struct MetalHUDHelperApp: App {
 
     @Bindable private var hudManager: MetalHUDManager
     @AppStorage("selectedSettingsTab") private var selectedSettingsTab = 0
+    @AppStorage("showFPSInMenuBar") private var showFPSInMenuBar = false
     @Environment(\.scenePhase) private var scenePhase
 
     var iconName = "MenuBarIconMono"
@@ -19,12 +20,10 @@ struct MetalHUDHelperApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra(
-            "Metal HUD Helper",
-            systemImage: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu"
-        ) {
-                MenuBarView(hudManager: hudManager)
-        
+        MenuBarExtra("Metal HUD Helper") {
+            MenuBarView(hudManager: hudManager)
+        } label: {
+            menuBarLabel
         }
         .menuBarExtraStyle(.menu)
         .onChange(of: scenePhase) {
@@ -32,8 +31,21 @@ struct MetalHUDHelperApp: App {
                 hudManager.checkHUDStatus()
             }
         }
+        .onChange(of: showFPSInMenuBar) {
+            hudManager.updateMonitoringState()
+        }
         Settings {
             SettingsView(selectedTab: $selectedSettingsTab)
+        }
+    }
+    
+    @ViewBuilder
+    private var menuBarLabel: some View {
+        if showFPSInMenuBar, let fps = hudManager.currentFPS {
+            Text("\(fps) FPS")
+                .font(.system(.body, design: .monospaced))
+        } else {
+            Image(systemName: hudManager.hudStatus == .enabled ? "cpu.fill" : "cpu")
         }
     }
 }
