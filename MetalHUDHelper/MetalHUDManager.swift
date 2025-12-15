@@ -17,6 +17,7 @@ class MetalHUDManager {
     private var logPipe: Pipe?
     private var lastFPSUpdate: Date = .distantPast
     private var workspaceObserver: NSObjectProtocol?
+    private let logProcessingQueue = DispatchQueue(label: "com.oliwonders.metalhudhelper.logprocessing", qos: .utility)
 
     init() {
         checkHUDStatus()
@@ -169,8 +170,11 @@ class MetalHUDManager {
             guard !data.isEmpty else { return }
             
             if let output = String(data: data, encoding: .utf8) {
-                Task { @MainActor in
-                    self.parseFPSFromLog(output)
+                // Process log output on a serial queue to avoid race conditions
+                self.logProcessingQueue.async {
+                    Task { @MainActor in
+                        self.parseFPSFromLog(output)
+                    }
                 }
             }
         }
@@ -199,10 +203,6 @@ class MetalHUDManager {
         // Terminate the process
         if process.isRunning {
             process.terminate()
-            // Wait briefly for clean termination
-            DispatchQueue.global().async {
-                process.waitUntilExit()
-            }
         }
         
         logMonitor = nil
@@ -235,7 +235,6 @@ class MetalHUDManager {
                         if let fpsValue = Double(fpsString) {
                             currentFPS = Int(round(fpsValue))
                             lastFPSUpdate = now
-                            print("Detected FPS: \(currentFPS ?? 0)")
                             return
                         }
                     }
