@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MenuBarView: View {
   @Bindable var hudManager: MetalHUDManager
-  @State private var showingAuthOverlay: Bool = false
 
   var body: some View {
     Label {
@@ -21,11 +20,7 @@ struct MenuBarView: View {
     .font(.headline)
     Divider()
     Button(hudActionText) {
-      if hudManager.hudStatus == .needsAuth {
-        showingAuthOverlay = true
-      } else {
-        hudManager.toggleHUD()
-      }
+      hudManager.toggleHUD()
     }
     Divider()
     CustomSettingsLink()
@@ -40,17 +35,6 @@ struct MenuBarView: View {
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         hudManager.checkHUDStatus()
       }
-    }
-    if showingAuthOverlay {
-      AuthorizationOverlay(
-        message: "Administrator privileges are required to enable or disable the Apple Metal HUD.",
-        onAuthorize: {
-          hudManager.authorizeAndToggleHUD()
-        },
-        onCancel: {
-          showingAuthOverlay = false
-        }
-      )
     }
   }
 
@@ -77,12 +61,8 @@ struct MenuBarView: View {
       return "Metal HUD is enabled"
     case .disabled:
       return "Metal HUD is disabled"
-    case .needsAuth:
-      return "Authorization required"
     }
   }
-    
-    
 
   var hudActionText: String {
     switch hudManager.hudStatus {
@@ -91,8 +71,6 @@ struct MenuBarView: View {
     case .enabled:
       return "Disable Metal HUD"
     case .disabled:
-      return "Enable Metal HUD"
-    case .needsAuth:
       return "Enable Metal HUD"
     }
   }

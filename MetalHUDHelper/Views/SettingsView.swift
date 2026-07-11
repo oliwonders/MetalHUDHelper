@@ -119,7 +119,7 @@ struct AboutTab: View {
 
             }
             Divider()
-            Text("© oli/wonders 2025. All rights reserved.")
+            Text("© oli/wonders 2026. All rights reserved.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)

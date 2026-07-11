@@ -9,13 +9,8 @@ struct MetalHUDHelperApp: App {
     @AppStorage("selectedSettingsTab") private var selectedSettingsTab = 0
     @Environment(\.scenePhase) private var scenePhase
 
-    var iconName = "MenuBarIconMono"
-
     init() {
         self._hudManager = Bindable(MetalHUDManager())
-        iconName =
-            hudManager.hudStatus == .enabled
-            ? "MenuBarIconMono" : "MenuBarIconMono"
     }
 
     var body: some Scene {

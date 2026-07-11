@@ -4,6 +4,14 @@ All notable changes to MetalHUDHelper will be documented in this file.
 
 ---
 
+## [1.2.0] - 2026-07-11
+
+### Changed
+- Toggling the Metal HUD no longer prompts for administrator privileges. Writing to the user-owned global domain (`defaults write -g MetalForceHudEnabled`) never required admin rights, so the toggle is now a single, prompt-free action.
+
+### Removed
+- The `AuthorizationOverlay` view, the `.needsAuth` HUD state, and the `authorizeAndToggleHUD()` AppleScript ("with administrator privileges") code path.
+
 ## [1.0.2] - 2025-05-15
 
 ### Added

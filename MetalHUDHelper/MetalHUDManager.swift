@@ -18,10 +18,7 @@ class MetalHUDManager {
             "defaults read -g MetalForceHudEnabled 2>/dev/null || echo 0"
         )
 
-        if !result.success {
-            print("needs authentication!")
-            hudStatus = .needsAuth
-        } else if result.output.lowercased() == "1"
+        if result.output.lowercased() == "1"
             || result.output.lowercased() == "true"
         {
             print("hud enabled")
@@ -32,39 +29,17 @@ class MetalHUDManager {
         }
     }
 
-    // Toggle HUD status
+    // Toggle HUD status. Writing the value to the global domain
+    // (~/Library/Preferences/.GlobalPreferences.plist) is user-owned and
+    // does not require administrator privileges.
     func toggleHUD() {
         let newValue = hudStatus == .enabled ? "NO" : "YES"
         let result = executeCommand(
             "defaults write -g MetalForceHudEnabled -bool \(newValue)"
         )
 
-        if !result.success {
-            // Need authorization
-            hudStatus = .needsAuth
-        } else {
-            // Toggle succeeded, update status
+        if result.success {
             hudStatus = hudStatus == .enabled ? .disabled : .enabled
-        }
-    }
-
-    // Authorize and toggle HUD with admin privileges
-    func authorizeAndToggleHUD() {
-        // Determine desired state (we want to enable if currently disabled or needs auth)
-        let newValue = hudStatus == .enabled ? "NO" : "YES"
-
-        // Run with admin privileges
-        let scriptText = """
-            do shell script "defaults write -g MetalForceHudEnabled -bool \(newValue)" with administrator privileges
-            """
-
-        var error: NSDictionary?
-        if let script = NSAppleScript(source: scriptText) {
-            script.executeAndReturnError(&error)
-
-            if error == nil {
-                hudStatus = newValue == "YES" ? .enabled : .disabled
-            }
         }
     }
 
@@ -86,7 +61,6 @@ enum HUDStatus {
     case unknown
     case enabled
     case disabled
-    case needsAuth
 }
 
 // MARK: - private methods
