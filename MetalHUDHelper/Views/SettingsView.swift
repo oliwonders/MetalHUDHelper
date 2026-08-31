@@ -57,6 +57,20 @@ struct AboutTab: View {
     private let build =
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
 
+    /// Released builds stamp `CFBundleVersion` with a UTC `yyyyMMddHHmm`
+    /// timestamp, so show it as a date when it parses and fall back to the raw
+    /// value otherwise.
+    private var buildLabel: String {
+        let parser = DateFormatter()
+        parser.locale = Locale(identifier: "en_US_POSIX")
+        parser.timeZone = TimeZone(identifier: "UTC")
+        parser.dateFormat = "yyyyMMddHHmm"
+        guard let date = parser.date(from: build) else {
+            return "Build \(build)"
+        }
+        return "Built \(date.formatted(date: .abbreviated, time: .omitted))"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .center, spacing: 16) {
@@ -70,6 +84,9 @@ struct AboutTab: View {
                         .font(.custom("Futura", size: 22).weight(.bold))
                     Text("Version \(version)")
                         .foregroundStyle(.secondary)
+                    Text(buildLabel)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
             }
             Divider()

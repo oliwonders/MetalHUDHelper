@@ -36,10 +36,14 @@ jobs:
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
           VERSION=${TAG_NAME#v}
-          echo "Using version: $VERSION"
+          BUILD=$(date -u +%Y%m%d%H%M)
+          echo "Using version: $VERSION (build $BUILD)"
+
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "BUILD=$BUILD" >> "$GITHUB_ENV"
 
           sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = $VERSION;/g" MetalHUDHelper.xcodeproj/project.pbxproj
-          sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = $VERSION;/g" MetalHUDHelper.xcodeproj/project.pbxproj
+          sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = $BUILD;/g" MetalHUDHelper.xcodeproj/project.pbxproj
 
       - name: Archive Release Build
         run: |
@@ -137,6 +141,30 @@ jobs:
             echo "Not running on a tag, skipping release creation"
           fi
 
+      - name: Sync version numbers back to main
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          # The archive was built from a detached tag checkout, so the version
+          # numbers only existed on the runner. Put the same ones on main so
+          # local builds report what was actually released.
+          git checkout -- MetalHUDHelper.xcodeproj/project.pbxproj
+          git fetch origin main
+          git checkout -B main origin/main
+
+          sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = $VERSION;/g" MetalHUDHelper.xcodeproj/project.pbxproj
+          sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = $BUILD;/g" MetalHUDHelper.xcodeproj/project.pbxproj
+
+          if git diff --quiet -- MetalHUDHelper.xcodeproj/project.pbxproj; then
+            echo "main is already at $VERSION ($BUILD); nothing to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Set version $VERSION (build $BUILD) from ${GITHUB_REF#refs/tags/}" \
+            -- MetalHUDHelper.xcodeproj/project.pbxproj
+          git push origin main
+
   update-cask:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build-and-publish
@@ -157,9 +185,11 @@ jobs:
           SHA=$(shasum -a 256 MetalHUDHelper.app.zip | awk '{ print $1 }')
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
       - name: Setup SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.HOMEBREW_DEPLOY_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.HOMEBREW_DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
       - name: Clone homebrew-tap via SSH
