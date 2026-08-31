@@ -39,6 +39,25 @@ enum MetalHUD {
         return (value as? NSNumber)?.boolValue == true
     }
 
+    /// Re-reads after asking `cfprefsd` to drop what it has cached. Without the
+    /// synchronize, a reader in another process keeps seeing its own stale copy
+    /// and a successful write looks like a failure.
+    static func isEnabledUncached() -> Bool {
+        _ = CFPreferencesAppSynchronize(kCFPreferencesAnyApplication)
+        return isEnabled()
+    }
+
+    /// Polls until the preference reaches `desired`, which is how a caller that
+    /// cannot write finds out whether anyone acted on its request.
+    static func awaitState(_ desired: Bool, timeout: Duration = .milliseconds(1500)) async -> Bool {
+        let deadline = ContinuousClock.now + timeout
+        while ContinuousClock.now < deadline {
+            if isEnabledUncached() == desired { return true }
+            try? await Task.sleep(for: .milliseconds(50))
+        }
+        return isEnabledUncached() == desired
+    }
+
     static func post(_ request: String) {
         CFNotificationCenterPostNotification(
             CFNotificationCenterGetDarwinNotifyCenter(),

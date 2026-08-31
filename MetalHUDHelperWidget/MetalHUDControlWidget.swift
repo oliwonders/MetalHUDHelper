@@ -3,7 +3,6 @@
 //  MetalHUDHelperWidget
 //
 
-import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -34,23 +33,5 @@ struct MetalHUDControlWidget: ControlWidget {
         func currentValue() async throws -> Bool {
             MetalHUD.isEnabled()
         }
-    }
-}
-
-/// The write itself is impossible here — a sandboxed process cannot modify the
-/// global domain — so this only asks the app to do it.
-@available(macOS 26.0, *)
-struct SetMetalHUDIntent: SetValueIntent {
-    static let title: LocalizedStringResource = "Toggle Metal HUD"
-    static let description = IntentDescription("Turn Apple's Metal performance HUD on or off.")
-
-    @Parameter(title: "Enabled")
-    var value: Bool
-
-    init() {}
-
-    func perform() async throws -> some IntentResult {
-        MetalHUD.post(value ? MetalHUD.Request.enable : MetalHUD.Request.disable)
-        return .result()
     }
 }
