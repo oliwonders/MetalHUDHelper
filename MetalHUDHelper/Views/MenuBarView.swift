@@ -5,6 +5,7 @@
 //  Created by David Oliver on 4/19/25.
 //
 
+import AppKit
 import SwiftUI
 
 struct MenuBarView: View {
@@ -14,8 +15,7 @@ struct MenuBarView: View {
     Label {
       Text(statusText)
     } icon: {
-      Image(systemName: statusImage)
-        .foregroundStyle(colorForStatus)
+      Image(nsImage: statusIcon)
     }
     .font(.headline)
     Divider()
@@ -38,19 +38,35 @@ struct MenuBarView: View {
     }
   }
 
-    var statusImage: String {
-        switch hudManager.hudStatus {
-        case .enabled: return "checkmark.circle.fill"
-        case .disabled: return "xmark.circle.fill"
-        default: return  "question.circle.fill"
-        }
+  /// `MenuBarExtra(.menu)` renders through AppKit, which drops a SwiftUI
+  /// `Image` supplied as a `Label` icon and templates whatever it does keep.
+  /// Build the symbol as an `NSImage` so the glyph survives, and mark it
+  /// non-template so the status color does too.
+  var statusIcon: NSImage {
+    let (name, color): (String, NSColor) =
+      switch hudManager.hudStatus {
+      case .enabled: ("checkmark.circle.fill", .systemGreen)
+      case .disabled: ("xmark.circle.fill", .systemRed)
+      case .unknown: ("questionmark.circle.fill", .systemGray)
+      }
+
+    let configuration = NSImage.SymbolConfiguration(
+      pointSize: NSFont.systemFontSize,
+      weight: .regular
+    )
+    .applying(NSImage.SymbolConfiguration(paletteColors: [color]))
+
+    guard
+      let symbol = NSImage(
+        systemSymbolName: name,
+        accessibilityDescription: statusText
+      ),
+      let icon = symbol.withSymbolConfiguration(configuration)
+    else {
+      return NSImage()
     }
-  var colorForStatus: Color {
-    switch hudManager.hudStatus {
-    case .enabled: return .green
-    case .disabled: return .red
-    default: return .gray
-    }
+    icon.isTemplate = false
+    return icon
   }
 
   var statusText: String {
