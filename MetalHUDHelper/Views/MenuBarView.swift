@@ -12,12 +12,8 @@ struct MenuBarView: View {
   @Bindable var hudManager: MetalHUDManager
 
   var body: some View {
-    Label {
-      Text(statusText)
-    } icon: {
-      Image(nsImage: statusIcon)
-    }
-    .font(.headline)
+    statusRow
+      .font(.headline)
     Divider()
     Button(hudActionText) {
       hudManager.toggleHUD()
@@ -38,35 +34,21 @@ struct MenuBarView: View {
     }
   }
 
-  /// `MenuBarExtra(.menu)` renders through AppKit, which drops a SwiftUI
-  /// `Image` supplied as a `Label` icon and templates whatever it does keep.
-  /// Build the symbol as an `NSImage` so the glyph survives, and mark it
-  /// non-template so the status color does too.
-  var statusIcon: NSImage {
-    let (name, color): (String, NSColor) =
+  /// macOS 27 draws no menu item image at all: not a SwiftUI `Label` icon,
+  /// and not a native `NSMenuItem.image` either. An image interpolated into
+  /// the item's text becomes part of the string rather than occupying the
+  /// image slot, which is the one form that survives on both 26 and 27.
+  /// Concatenating rather than tinting the whole row keeps the color on the
+  /// glyph without dragging the label along with it.
+  var statusRow: Text {
+    let (name, color): (String, Color) =
       switch hudManager.hudStatus {
-      case .enabled: ("checkmark.circle.fill", .systemGreen)
-      case .disabled: ("xmark.circle.fill", .systemRed)
-      case .unknown: ("questionmark.circle.fill", .systemGray)
+      case .enabled: ("checkmark.circle.fill", .green)
+      case .disabled: ("xmark.circle.fill", .red)
+      case .unknown: ("questionmark.circle.fill", .gray)
       }
-
-    let configuration = NSImage.SymbolConfiguration(
-      pointSize: NSFont.systemFontSize,
-      weight: .regular
-    )
-    .applying(NSImage.SymbolConfiguration(paletteColors: [color]))
-
-    guard
-      let symbol = NSImage(
-        systemSymbolName: name,
-        accessibilityDescription: statusText
-      ),
-      let icon = symbol.withSymbolConfiguration(configuration)
-    else {
-      return NSImage()
-    }
-    icon.isTemplate = false
-    return icon
+    return Text(Image(systemName: name)).foregroundStyle(color)
+      + Text(" \(statusText)")
   }
 
   var statusText: String {
