@@ -2,15 +2,21 @@
 
 [![Homebrew Cask](https://img.shields.io/badge/Homebrew-metalhudhelper-6f4e99?logo=homebrew&logoColor=white)](https://brew.sh/)
 
-A macOS menu bar app for toggling the Apple Metal performance HUD. Avoids having to execute commands via the Terminal.
+A macOS menu bar app for toggling the Apple Metal performance HUD system wide. Avoids having to execute commands via the Terminal.
 
 ![screenshot](images/metalhudhelper.png)
 
 When you want to see the performance HUD, just enable using **MetalHUDHelper** and restart the game or application.
 
-The app is eliminates the need to execute these commands from the terminal:
+The app eliminates the need to execute these commands from the terminal:
 
 `defaults write -g MetalForceHudEnabled -bool YES` to enable and `defaults write -g MetalForceHudEnabled -bool NO` to disable.
+
+### How it works
+
+**MetalHUDHelper** reads and writes the `MetalForceHudEnabled` preference in the global domain (`~/Library/Preferences/.GlobalPreferences.plist`) through `CFPreferences` directly, rather than shelling out to `defaults`. This is a user-owned preference, so toggling never requires administrator privileges.
+
+Reads go through the same preference resolution Metal itself performs. macOS can hold this key in two host scopes, and a per-host value silently takes precedence over the global one, so the app clears any per-host value when you toggle — keeping the global domain authoritative.
 
 ### Reference
 
@@ -18,11 +24,25 @@ The app is eliminates the need to execute these commands from the terminal:
 
 ## Features
 
-- One-click toggle enabling/disabling the Metal performance HUD
+- One-click toggle enabling/disabling the Metal performance HUD system wide
 - Status persists after reboot
 - App can start on login by enabling "Start at Login" via settings
 
 > **Note**: after toggling, you need quit and relaunch the target application(s) for the changes to take effect
+
+### Troubleshooting
+
+If the HUD still does not appear after relaunching, check for a stale per-host value, which overrides the global setting:
+
+```sh
+# should report that the domain/default pair does not exist
+defaults -currentHost read -g MetalForceHudEnabled
+
+# clears it if it is set
+defaults -currentHost delete -g MetalForceHudEnabled
+```
+
+Toggling in **MetalHUDHelper** clears this for you, so you should only need this if the HUD was set up by other means.
 
 ## Requirements
 

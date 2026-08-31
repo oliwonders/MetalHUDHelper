@@ -12,15 +12,18 @@ class MetalHUDManager {
     }
 
     // MARK: - public functions
-    // Check if Metal HUD is currently enabled
+    // Check if Metal HUD is currently enabled.
     func checkHUDStatus() {
-        let result = executeCommand(
-            "defaults read -g MetalForceHudEnabled 2>/dev/null || echo 0"
+        // CFPreferencesCopyAppValue walks the full preference search list,
+        // which puts the per-host value ahead of the global one. That is the
+        // same resolution Metal performs, so the reported status cannot drift
+        // from what Metal actually reads.
+        let value = CFPreferencesCopyAppValue(
+            Self.hudKey,
+            kCFPreferencesAnyApplication
         )
 
-        if result.output.lowercased() == "1"
-            || result.output.lowercased() == "true"
-        {
+        if (value as? NSNumber)?.boolValue == true {
             print("hud enabled")
             hudStatus = .enabled
         } else {
@@ -33,14 +36,34 @@ class MetalHUDManager {
     // (~/Library/Preferences/.GlobalPreferences.plist) is user-owned and
     // does not require administrator privileges.
     func toggleHUD() {
-        let newValue = hudStatus == .enabled ? "NO" : "YES"
-        let result = executeCommand(
-            "defaults write -g MetalForceHudEnabled -bool \(newValue)"
+        let newValue = hudStatus != .enabled
+
+        CFPreferencesSetValue(
+            Self.hudKey,
+            newValue as CFBoolean,
+            kCFPreferencesAnyApplication,
+            kCFPreferencesCurrentUser,
+            kCFPreferencesAnyHost
         )
 
-        if result.success {
-            hudStatus = hudStatus == .enabled ? .disabled : .enabled
+        // A per-host value takes precedence over the global one, so a stale
+        // one would shadow the write above. Clear it to keep the global
+        // domain as the single source of truth.
+        CFPreferencesSetValue(
+            Self.hudKey,
+            nil,
+            kCFPreferencesAnyApplication,
+            kCFPreferencesCurrentUser,
+            kCFPreferencesCurrentHost
+        )
+
+        guard CFPreferencesAppSynchronize(kCFPreferencesAnyApplication) else {
+            print("error setting hud status")
+            return
         }
+
+        // Re-read rather than assume, so the menu reflects what actually landed.
+        checkHUDStatus()
     }
 
     func openConsoleWithMetalFilter() {
@@ -63,31 +86,7 @@ enum HUDStatus {
     case disabled
 }
 
-// MARK: - private methods
+// MARK: - private constants
 extension MetalHUDManager {
-
-    private func executeCommand(_ command: String) -> (
-        success: Bool, output: String
-    ) {
-        let task = Process()
-        task.launchPath = "/bin/bash"
-        task.arguments = ["-c", command]
-
-        let pipe = Pipe()
-        task.standardOutput = pipe
-
-        do {
-            try task.run()
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
-            task.waitUntilExit()
-            return (
-                task.terminationStatus == 0,
-                output.trimmingCharacters(in: .whitespacesAndNewlines)
-            )
-        } catch {
-            print("Error executing command: \(error)")
-            return (false, "")
-        }
-    }
+    fileprivate static let hudKey = "MetalForceHudEnabled" as CFString
 }
