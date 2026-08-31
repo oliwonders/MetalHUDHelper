@@ -1,0 +1,51 @@
+//
+//  MetalHUDShared.swift
+//  MetalHUDHelper
+//
+//  Compiled into both the app and the Control Center widget extension.
+//
+
+import Foundation
+
+/// The contract between the app and the Control Center control.
+///
+/// The widget extension is sandboxed; the app is not. A sandboxed process can
+/// *read* the global preference domain but cannot write it — the write is
+/// dropped and `CFPreferencesAppSynchronize` returns false. So the control
+/// renders state from its own read, and asks the app to perform the write.
+enum MetalHUD {
+
+    static let preferenceKey = "MetalForceHudEnabled"
+
+    /// `CFString` is not `Sendable`, so the constant is stored as a `String`
+    /// and bridged at each use rather than held as a static.
+    static var preferenceCFKey: CFString { preferenceKey as CFString }
+
+    /// Darwin notifications cross the sandbox boundary and need no entitlement,
+    /// but they carry no payload. One name per desired state, rather than a
+    /// single "toggle", keeps the request idempotent: a duplicate delivery
+    /// cannot flip the HUD back.
+    enum Request {
+        static let enable = "com.oliwonders.MetalHUDHelper.enableHUD"
+        static let disable = "com.oliwonders.MetalHUDHelper.disableHUD"
+
+        static var all: [String] { [enable, disable] }
+    }
+
+    /// Reads through the same resolution Metal performs, so the reported value
+    /// cannot drift from what Metal actually uses. Safe inside the sandbox.
+    static func isEnabled() -> Bool {
+        let value = CFPreferencesCopyAppValue(preferenceCFKey, kCFPreferencesAnyApplication)
+        return (value as? NSNumber)?.boolValue == true
+    }
+
+    static func post(_ request: String) {
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            CFNotificationName(request as CFString),
+            nil,
+            nil,
+            true
+        )
+    }
+}
