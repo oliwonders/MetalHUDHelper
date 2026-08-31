@@ -4,6 +4,20 @@ All notable changes to MetalHUDHelper will be documented in this file.
 
 ---
 
+## [1.2.1] - 2026-08-31
+
+### Fixed
+
+- The status glyph next to "Metal HUD is enabled" disappeared on macOS 27 Golden Gate and never rendered in color on macOS 26. The glyph now renders on both macOS 26 Tahoe and 27 Golden Gate (beta 7).
+
+### Added
+
+- The About tab now shows the build date alongside the version.
+
+### Changed
+
+- The release workflow commits the version numbers it derives from the tag back to `main`, so the project file records what was actually released instead of drifting until bumped it by hand.
+
 ## [1.2.0] - 2026-08-31
 
 ### Fixed
