@@ -4,6 +4,22 @@ All notable changes to MetalHUDHelper will be documented in this file.
 
 ---
 
+## [1.3.0] - 2026-09-04
+
+### Added
+
+- A Control Center control for the Metal HUD, on macOS 26 Tahoe and later. The toggle reports the HUD's real state and flips it without opening the app. The app itself still runs on macOS 15, where nothing changes.
+- The control now says when it has nobody to talk to. Only an unsandboxed process can write the global preference domain, so the control signals the app and the app performs the write; with the app not running, the toggle previously did nothing and reported nothing. It now offers to open the app, re-sends the request, and surfaces an error if that still does not take.
+
+### Fixed
+
+- The release pipeline had been stripping the app's entitlements on every release, not only since the extension existed. Re-signing the exported bundle with `codesign --force --sign` and no `--entitlements` dropped `com.apple.security.files.user-selected.read-only`, visible as the app's special slot count falling from 7 to 3.
+
+### Changed
+
+- The release workflow verifies signatures rather than re-signing. `-exportArchive` already applies the hardened runtime to the app and the nested extension, because the archive passes `OTHER_CODE_SIGN_FLAGS="--options runtime"` to every target, so the re-sign protected nothing. Every bundle must now carry the hardened runtime and pass `codesign --verify --deep --strict`, which fails the build before notarization instead of during it.
+- The copyright string reads 2026.
+
 ## [1.2.1] - 2026-08-31
 
 ### Fixed

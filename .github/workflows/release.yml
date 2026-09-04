@@ -63,11 +63,35 @@ jobs:
             -archivePath $PWD/build/MetalHUDHelper.xcarchive \
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist
-      - name: Re-sign with Hardened Runtime
-        env:
-          CODE_SIGN_IDENTITY: "Developer ID Application: David Oliver (ZV389CJJBX)"
+      # The archive is built with OTHER_CODE_SIGN_FLAGS="--options runtime",
+      # which applies the hardened runtime to every target, the widget
+      # extension included, and -exportArchive preserves it. Re-signing the
+      # outer bundle here used to be a no-op that also stripped the app's
+      # entitlements, since `codesign --force --sign` without --entitlements
+      # drops them. Verify instead of re-signing.
+      - name: Verify signing of the app and its nested extension
         run: |
-          codesign --force --options runtime --sign "$CODE_SIGN_IDENTITY" build/MetalHUDHelper.app
+          APP=build/MetalHUDHelper.app
+          rc=0
+
+          for bundle in "$APP" "$APP"/Contents/PlugIns/*.appex; do
+            [ -e "$bundle" ] || continue
+            if codesign -d --verbose=2 "$bundle" 2>&1 | grep -q "flags=.*runtime"; then
+              echo "hardened runtime ok: $bundle"
+            else
+              echo "::error::missing hardened runtime, notarization would reject: $bundle"
+              rc=1
+            fi
+          done
+
+          # --deep --strict walks into the extension; the outer signature alone
+          # passing does not mean the nested code is intact.
+          codesign --verify --deep --strict --verbose=2 "$APP" || rc=1
+
+          echo "--- entitlements the app will ship with ---"
+          codesign -d --entitlements - --xml "$APP" 2>/dev/null | plutil -convert xml1 -o - - || true
+
+          exit $rc
 
       - name: Zip the .app Bundle for homebrew
         run: |
