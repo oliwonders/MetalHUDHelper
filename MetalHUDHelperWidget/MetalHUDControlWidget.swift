@@ -21,7 +21,7 @@ struct MetalHUDControlWidget: ControlWidget {
                       systemImage: isOn ? "cpu.fill" : "cpu")
             }
         }
-        .displayName("Metal HUD")
+        .displayName("Toggle Metal HUD")
         .description("Toggle Apple's Metal performance HUD.")
     }
 
