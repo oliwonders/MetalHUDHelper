@@ -303,7 +303,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MetalHUDHelperWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelperWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 oli/wonders. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -340,7 +340,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MetalHUDHelperWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelperWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 oli/wonders. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -509,7 +509,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelper;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 oli/wonders. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -547,7 +547,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = MetalHUDHelper;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 oli/wonders. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 oli/wonders. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
