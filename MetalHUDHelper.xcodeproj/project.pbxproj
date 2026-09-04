@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63CD98A32E9720000F91B4D3 /* MetalHUDToggleIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD98A22E9720000F91B4D2 /* MetalHUDToggleIntent.swift */; };
 		633CE0F22DC037D70051AFF1 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 633CE0F12DC037D70051AFF1 /* ExportOptions.plist */; };
 		635B0BF12E42BAD20002BBB4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */; };
 		635B0BF22E42BAD20002BBB4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */; };
@@ -15,6 +14,7 @@
 		63ACE1272E95BF310068AA9B /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 63ACE1262E95BF310068AA9B /* LaunchAtLogin */; };
 		63CD97CA2E97135C00F91B4D /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 63CD97C92E97135C00F91B4D /* LaunchAtLogin */; };
 		63CD98A12E9720000F91B4D1 /* MetalHUDShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD98A02E9720000F91B4D0 /* MetalHUDShared.swift */; };
+		63CD98A32E9720000F91B4D3 /* MetalHUDToggleIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD98A22E9720000F91B4D2 /* MetalHUDToggleIntent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,16 +42,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		63CD98A22E9720000F91B4D2 /* MetalHUDToggleIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetalHUDToggleIntent.swift; path = MetalHUDHelper/MetalHUDToggleIntent.swift; sourceTree = "<group>"; };
 		633CE0F12DC037D70051AFF1 /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
 		635B0BD32E42B4AC0002BBB4 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		635B0BD52E42B4AC0002BBB4 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		635B0BF02E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MetalHUDHelperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CD98A02E9720000F91B4D0 /* MetalHUDShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetalHUDShared.swift; path = MetalHUDHelper/MetalHUDShared.swift; sourceTree = "<group>"; };
+		63CD98A22E9720000F91B4D2 /* MetalHUDToggleIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetalHUDToggleIntent.swift; path = MetalHUDHelper/MetalHUDToggleIntent.swift; sourceTree = "<group>"; };
 		63E5AC362D974CE50084B47E /* MetalHUDHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalHUDHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		63397531304B202D00965C05 /* Exceptions for "MetalHUDHelperWidget" folder in "MetalHUDHelperWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 635B0BEF2E42BAD10002BBB4 /* MetalHUDHelperWidgetExtension */;
+		};
 		6399DA992DB4480E000696F0 /* Exceptions for "MetalHUDHelper" folder in "MetalHUDHelper" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -64,6 +71,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		635B0BD72E42B4AC0002BBB4 /* MetalHUDHelperWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				63397531304B202D00965C05 /* Exceptions for "MetalHUDHelperWidget" folder in "MetalHUDHelperWidgetExtension" target */,
+			);
 			path = MetalHUDHelperWidget;
 			sourceTree = "<group>";
 		};
@@ -112,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				63CD98A02E9720000F91B4D0 /* MetalHUDShared.swift */,
+				63CD98A22E9720000F91B4D2 /* MetalHUDToggleIntent.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -196,7 +207,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					635B0BEF2E42BAD10002BBB4 = {
 						CreatedOnToolsVersion = 26.0;
