@@ -48,6 +48,9 @@ jobs:
           sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = $BUILD;/g" MetalHUDHelper.xcodeproj/project.pbxproj
 
       - name: Archive Release Build
+        env:
+          CODE_SIGN_DEVELOPMENT_TEAM_ID: ${{ secrets.CODE_SIGN_DEVELOPMENT_TEAM_ID }}
+          CODE_SIGN_DEVELOPMENT_IDENTITY: ${{ secrets.CODE_SIGN_DEVELOPMENT_IDENTITY }}
         run: |
           xcodebuild archive \
             -project MetalHUDHelper.xcodeproj \
