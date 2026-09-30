@@ -4,7 +4,7 @@ All notable changes to MetalHUDHelper will be documented in this file.
 
 ---
 
-## [1.3.0] - 2026-09-04
+## [1.3.0] - 2026-09-30
 
 ### Added
 
