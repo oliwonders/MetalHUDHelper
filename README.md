@@ -2,7 +2,7 @@
 
 [![Homebrew Cask](https://img.shields.io/badge/Homebrew-metalhudhelper-6f4e99?logo=homebrew&logoColor=white)](https://brew.sh/)
 
-A macOS menu bar app for toggling the Apple Metal performance HUD system wide. Avoids having to execute commands via the Terminal.
+A macOS menu bar (and Control Center!) app for toggling the Apple Metal performance HUD system wide. Avoids having to execute commands via the Terminal.
 
 ![screenshot](images/metalhudhelper.png)
 
