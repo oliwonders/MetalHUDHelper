@@ -11,6 +11,16 @@ class MetalHUDManager {
     init() {
         checkHUDStatus()
         observeControlRequests()
+
+        // The HUD can already be on, set with `defaults write` or before this
+        // app was installed. Deferred so NSApp exists to show the alert.
+        if VirtualMachineGuard.isVirtualMachine && hudStatus == .enabled {
+            DispatchQueue.main.async { [weak self] in
+                if VirtualMachineGuard.presentHUDAlreadyOn() {
+                    self?.setHUD(enabled: false)
+                }
+            }
+        }
     }
 
     // MARK: - public functions
@@ -36,6 +46,16 @@ class MetalHUDManager {
     // (~/Library/Preferences/.GlobalPreferences.plist) is user-owned and
     // does not require administrator privileges.
     func setHUD(enabled: Bool) {
+        // Every way of turning the HUD on comes through here, the menu and
+        // the Control Center control alike. Turning it off stays allowed.
+        if enabled && VirtualMachineGuard.isVirtualMachine {
+            VirtualMachineGuard.presentEnableBlocked()
+            // A control that was just flipped must snap back to what is true.
+            checkHUDStatus()
+            reloadControls()
+            return
+        }
+
         CFPreferencesSetValue(
             MetalHUD.preferenceCFKey,
             enabled as CFBoolean,

@@ -4,6 +4,16 @@ All notable changes to MetalHUDHelper will be documented in this file.
 
 ---
 
+## [1.3.1] - 2026-10-09
+
+### Added
+
+- The app offers to move itself into Applications when it is launched from anywhere else, such as a mounted disk image or the Desktop. From a disk image or a translocated copy the path is read-only and random, and in a protected folder like Desktop or Downloads the Control Center control renders but can't toggle the HUD. Choosing "Move to Applications" copies the app into `/Applications` (or `~/Applications` if that isn't writable), relaunches from there, and trashes the original when it can. "Don't ask again" is remembered. Debug builds skip the check.
+
+### Fixed
+
+- The Metal HUD can no longer be turned on inside a virtual machine, where it crashes every Metal app on its first frame. The menu and the Control Center control both refuse, and if the HUD is already on in a VM at launch, the app offers to turn it off. See the README.
+
 ## [1.3.0] - 2026-09-30
 
 ### Added
