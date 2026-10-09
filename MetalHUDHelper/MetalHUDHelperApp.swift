@@ -11,6 +11,9 @@ struct MetalHUDHelperApp: App {
 
     init() {
         self._hudManager = Bindable(MetalHUDManager())
+
+        // Deferred so NSApp exists to show the alert.
+        DispatchQueue.main.async { InstallLocationGuard.offerMoveIfNeeded() }
     }
 
     var body: some Scene {
